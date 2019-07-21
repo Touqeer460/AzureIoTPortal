@@ -1611,7 +1611,8 @@
     <Content Include="Content\Theme\vendors\uniform\www\CNAME" />
     <Content Include="Content\Theme\vendors\uniform\www\downloads\.keep" />
     <Content Include="Content\Theme\vendors\uniform\www\stylesheets\multiple-themes.scss" />
-    <None Include="Properties\PublishProfiles\myresources - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\azureportaliot - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="img\glyphicons-halflings-white.png" />
     <Content Include="img\glyphicons-halflings.png" />
@@ -1662,7 +1663,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

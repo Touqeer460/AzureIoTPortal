@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace AzureIoT.FrontEnd
 {
@@ -46,28 +45,28 @@ namespace AzureIoT.FrontEnd
 
 
 
-              bundles.Add(new ScriptBundle("~/bundles/vendors").Include(
-    "~/Content/Theme/vendors/uniform/jquery.uniform.js"
-    , "~/Content/Theme/vendors/chosen.jquery.js"
-    , "~/Content/Theme/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"
-    , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/javascripts/bootstrap-wysihtml5/wysihtml5.js"
-    , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/javascripts/bootstrap-wysihtml5/core-b3.js"
-    , "~/Content/Theme/vendors/twitter-bootstrap-wizard/jquery.bootstrap.wizard-for.bootstrap3.js"
-    , "~/Content/Theme/vendors/boostrap3-typeahead/bootstrap3-typeahead.js"
-    , "~/Content/Theme/vendors/easypiechart/jquery.easy-pie-chart.js"
-    , "~/Content/Theme/vendors/ckeditor/ckeditor.js"
-    , "~/Content/Theme/vendors/tinymce/js/tinymce/tinymce.js"
-    , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/javascripts/bootstrap-wysihtml5/wysihtml5.js"
-    , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/javascripts/bootstrap-wysihtml5/core-b3.js"
-    , "~/Content/Theme/vendors/jGrowl/jquery.jgrowl.js"
-    , "~/Content/Theme/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"
-    , "~/Content/Theme/vendors/sparkline/jquery.sparkline.js"
-    , "~/Content/Theme/vendors/tablesorter/js/jquery.tablesorter.js"
-    , "~/Content/Theme/vendors/flot/jquery.flot.js"
-    , "~/Content/Theme/vendors/flot/jquery.flot.selection.js"
-    , "~/Content/Theme/vendors/flot/jquery.flot.resize.js"
-    , "~/Content/Theme/vendors/fullcalendar/fullcalendar.js"
-                   ));
+            bundles.Add(new ScriptBundle("~/bundles/vendors").Include(
+  "~/Content/Theme/vendors/uniform/jquery.uniform.js"
+  , "~/Content/Theme/vendors/chosen.jquery.js"
+  , "~/Content/Theme/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"
+  , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/javascripts/bootstrap-wysihtml5/wysihtml5.js"
+  , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/javascripts/bootstrap-wysihtml5/core-b3.js"
+  , "~/Content/Theme/vendors/twitter-bootstrap-wizard/jquery.bootstrap.wizard-for.bootstrap3.js"
+  , "~/Content/Theme/vendors/boostrap3-typeahead/bootstrap3-typeahead.js"
+  , "~/Content/Theme/vendors/easypiechart/jquery.easy-pie-chart.js"
+  , "~/Content/Theme/vendors/ckeditor/ckeditor.js"
+  , "~/Content/Theme/vendors/tinymce/js/tinymce/tinymce.js"
+  , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/javascripts/bootstrap-wysihtml5/wysihtml5.js"
+  , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/javascripts/bootstrap-wysihtml5/core-b3.js"
+  , "~/Content/Theme/vendors/jGrowl/jquery.jgrowl.js"
+  , "~/Content/Theme/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"
+  , "~/Content/Theme/vendors/sparkline/jquery.sparkline.js"
+  , "~/Content/Theme/vendors/tablesorter/js/jquery.tablesorter.js"
+  , "~/Content/Theme/vendors/flot/jquery.flot.js"
+  , "~/Content/Theme/vendors/flot/jquery.flot.selection.js"
+  , "~/Content/Theme/vendors/flot/jquery.flot.resize.js"
+  , "~/Content/Theme/vendors/fullcalendar/fullcalendar.js"
+                 ));
 
 
 
