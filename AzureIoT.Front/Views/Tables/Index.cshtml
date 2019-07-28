@@ -1,83 +1,148 @@
 ﻿@{
     ViewBag.Title = "Devices";
 }
-
-@Html.Partial("_LeftMenu")
-<!-- content -->
-<div class="col-md-10">
-    <div class="row">
-        <div class="panel panel-default bootstrap-admin-no-table-panel">
-            <div class="panel-heading">
-                <div class="text-muted bootstrap-admin-box-title">Devices</div>
-            </div>
-            <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <legend>Add New</legend>
+<script>
+    function modal(v) {
+        $('#defaultModal').removeClass('hidden');
+        $('#content').addClass('hidden');
+        $('.btn-group button')[0].remove();
+        $('.btn-group div')[0].remove();
+    }
+    function closemodal(v) {
+        $('#defaultModal').addClass('hidden');
+        $('#content').removeClass('hidden');
+    }
+</script>
+<div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="defaultModalLabel">Create new device</h4>
+        </div>
+        <div class="body">
+            <form class="form-horizontal">
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                        <label for="email_address_2">Device name</label>
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                         <div class="form-group">
-                            <label class="col-lg-1 control-label" for="focusedInput">ID</label>
-                            <div class="col-lg-1">
-                                <input class="form-control" id="focusedInput" type="text" value="0, 1, 2">
-                            </div>
-                            <label class="col-lg-2 control-label" for="focusedInput">Name</label>
-                            <div class="col-lg-3">
-                                <input class="form-control" id="focusedInput" type="text" value="">
-                            </div>
-                            <label class="col-lg-2 control-label" for="focusedInput">Group</label>
-                            <div class="col-lg-3">
-                                <select class="form-control">
-                                    <option value="mercedes"></option>
-                                    <option value="volvo">Group 1</option>
-                                    <option value="saab">Group 2</option>
-                                </select>
+                            <div class="form-line">
+                                <input type="text" id="email_address_2" class="form-control" placeholder="Enter device name">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                        <button type="reset" class="btn btn-default">Cancel</button>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="text-muted bootstrap-admin-box-title">Registered Devices</div>
-            </div>
-            <div class="bootstrap-admin-panel-content">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Device Group</th>
-                            <th>Status</th>
-                            <th>Last Connected</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Device 1</td>
-                            <td>Group 2</td>
-                            <td>Active</td>
-                            <td>2019-06-01 13:45:30</td>
-                            <td><a href="#">Details</a>&nbsp;|&nbsp;<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Device 2</td>
-                            <td>Group 1</td>
-                            <td>Non-Active</td>
-                            <td>2019-06-01 13:45:30</td>
-                            <td><a href="#">Details</a>&nbsp;|&nbsp;<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                        <label for="email_address_2">Device group</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="callout">
+                            <select class="form-control ms-selectable">
+                                <option class="form-control">Grp-1</option>
+                                <option class="form-control">Grp-2</option>
+                                <option class="form-control">Grp-3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                        <button type="button" class="btn btn-primary m-t-15 waves-effect">LOGIN</button>
+                        <button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>
+                    </div>
+                </div>
+            </form>
+            <br />
         </div>
     </div>
 </div>
 
+<div class="row clearfix">
+    <div id="content" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    DEVICES
 
+                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect">Add new</button>
+                </h2>
+            </div>
+            <div class="body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Device Group</th>
+                                <th>Status</th>
+                                <th>Last Connected</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Chiller-0.10</td>
+                                <td>Basement Chiller</td>
+                                <td>Chiller</td>
+                                <td>Active</td>
+                                <td>2019/07/25</td>
+                            </tr>
+                            <tr>
+                                <td>Chiller-0.20</td>
+                                <td>Ground Floor Chiller</td>
+                                <td>Chiller</td>
+                                <td>Active</td>
+                                <td>2019/07/25</td>
+                            </tr>
+                            <tr>
+                                <td>delivery-truck-0.10</td>
+                                <td>Morning Delivery Truck</td>
+                                <td>Truck</td>
+                                <td>Active</td>
+                                <td>2009/01/12</td>
+                            </tr>
+                            <tr>
+                                <td>delivery-truck-0.20</td>
+                                <td>Evening Delivery Truck</td>
+                                <td>Truck</td>
+                                <td>Non-functional</td>
+                                <td>2019/07/25</td>
+                            </tr>
+                            <tr>
+                                <td>elevator-0.10</td>
+                                <td>Left Elevator</td>
+                                <td>Elevator</td>
+                                <td>Non-functional</td>
+                                <td>2019/07/25</td>
+                            </tr>
+                            <tr>
+                                <td>elevator-0.10</td>
+                                <td>Left Elevator</td>
+                                <td>Elevator</td>
+                                <td>Active</td>
+                                <td>2019/07/27</td>
+                            </tr>
+                            <tr>
+                                <td>engine-0.10</td>
+                                <td>Engine A</td>
+                                <td>Engine</td>
+                                <td>Non-functional</td>
+                                <td>2019/07/22</td>
+                            </tr>
+                            <tr>
+                                <td>engine-0.20</td>
+                                <td>Engine B</td>
+                                <td>Engine</td>
+                                <td>Non-functional</td>
+                                <td>2019/07/22</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #END# Basic Examples -->

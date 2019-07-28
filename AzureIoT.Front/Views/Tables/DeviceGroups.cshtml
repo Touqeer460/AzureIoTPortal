@@ -2,68 +2,139 @@
     ViewBag.Title = "Device Groups";
 }
 
-    @Html.Partial("_LeftMenu")
-    <!-- content -->
-            <div class="col-md-10">
-                <div class="row">
-                    <div class="panel panel-default bootstrap-admin-no-table-panel">
-                        <div class="panel-heading">
-                            <div class="text-muted bootstrap-admin-box-title">Device groups</div>
-                        </div>
-                        <div class="bootstrap-admin-no-table-panel-content bootstrap-admin-panel-content collapse in">
-                            <form class="form-horizontal">
-                                <fieldset>
-                                    <legend>Add New</legend>
-                                    <div class="form-group">
-                                        <label class="col-lg-1 control-label" for="focusedInput">ID</label>
-                                        <div class="col-lg-1">
-                                            <input class="form-control" id="focusedInput" type="text" value="0, 1, 2">
-                                        </div>
-                                        <label class="col-lg-2 control-label" for="focusedInput">Name</label>
-                                        <div class="col-lg-3">
-                                            <input class="form-control" id="focusedInput" type="text" value="">
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                    <button type="reset" class="btn btn-default">Cancel</button>
-                                </fieldset>
-                            </form>
+<script>
+    function modal(v) {
+        $('#defaultModal').removeClass('hidden');
+        $('#content').addClass('hidden');
+    }
+    function closemodal(v) {
+        $('#defaultModal').addClass('hidden');
+        $('#content').removeClass('hidden');
+    }
+    function swap(v) {
+        v.removeChild(v.getElementsByTagName("i")[0]);
+        var parent = v.parentElement;
+        parent.removeChild(v);
+
+        if (parent.id == 'include') {
+            v.innerHTML += '<i class="pull-right material-icons">add</i>';
+            document.getElementById('exclude').append(v);
+        }
+        else {
+            v.innerHTML += '<i class="pull-right material-icons">clear</i>';
+            document.getElementById('include').append(v);
+        }
+    }
+</script>
+<div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="defaultModalLabel">Create new device group</h4>
+        </div>
+        <div class="body">
+            <form class="form-horizontal">
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                        <label for="email_address_2">Group name</label>
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" id="email_address_2" class="form-control" placeholder="Enter group name">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="text-muted bootstrap-admin-box-title">Groups</div>
-                        </div>
-                        <div class="bootstrap-admin-panel-content">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Group Telemetries</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Group 1</td>
-                                        <td>Humitidty, Air pressure</td>
-                                        <td><a href="#">Assign telemetries</a>&nbsp;|&nbsp;<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Group 2</td>
-                                        <td>Temperature</td>
-                                        <td><a href="#">Assign telemetries</a>&nbsp;|&nbsp;<a href="#">Edit</a>&nbsp;|&nbsp;<a href="#">Delete</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                        <label for="email_address_2">Group telemetries</label>
+                    </div>
+
+                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-6 card">
+                        <div class="body">
+                            <div class="col-lg-6 col-md-6">
+                                <label for="email_address_2">Include</label>
+                                <div id="include" class="list-group">
+                                    <a onclick="swap(this)" class="list-group-item">chillerSensors:v1<i class="pull-right material-icons">clear</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">engineSensors:v1<i class="pull-right material-icons">clear</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">truckSensors:v1<i class="pull-right material-icons">clear</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">elevatorSensor:v1<i class="pull-right material-icons">clear</i></a>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <label for="email_address_2">Exclude</label>
+                                <div id="exclude" class="list-group">
+                                    <a onclick="swap(this)" class="list-group-item">chillerSensors:v2<i class="pull-right material-icons">add</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">engineSensors:v2<i class="pull-right material-icons">add</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">truckSensors:v2<i class="pull-right material-icons">add</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">elevatorSensor:v2<i class="pull-right material-icons">add</i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+
+                <div class="row clearfix">
+                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                        <button type="button" class="btn btn-primary m-t-15 waves-effect">SAVE</button>
+                        <button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <br />
+
+    </div>
+</div>
+
+<div class="row clearfix">
+    <div id="content" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    DEVICE GROUPS
+
+                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect">Add new</button>
+                </h2>
+            </div>
+            <div class="body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Telemetries</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>grp-1</td>
+                                <td>Chiller</td>
+                                <td>chillerSensor:v1</td>
+                            </tr>
+                            <tr>
+                                <td>grp-2</td>
+                                <td>Truck</td>
+                                <td>truckSensors:v1</td>
+                            </tr>
+                            <tr>
+                                <td>grp-3</td>
+                                <td>Elevator</td>
+                                <td>elevatorSensors:v1</td>
+                            </tr>
+                            <tr>
+                                <td>grp-4</td>
+                                <td>Engine</td>
+                                <td>engineSensors:v1</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-
+        </div>
+    </div>
+</div>
+<!-- #END# Basic Examples -->

@@ -66,29 +66,37 @@ namespace AzureIoT.FrontEnd
   , "~/Content/Theme/vendors/flot/jquery.flot.selection.js"
   , "~/Content/Theme/vendors/flot/jquery.flot.resize.js"
   , "~/Content/Theme/vendors/fullcalendar/fullcalendar.js"
+  , "~/Scripts/plugins/jquery/jquery.min.js"
+  , "~/Scripts/plugins/bootstrap/js/bootstrap.js"
+  , "~/Scripts/plugins/bootstrap-select/js/bootstrap-select.js"
+  , "~/Scripts/plugins/jquery-slimscroll/jquery.slimscroll.js"
+  , "~/Scripts/plugins/node-waves/waves.js"
+  , "~/Scripts/plugins/jquery-countto/jquery.countTo.js"
+  , "~/Scripts/plugins/raphael/raphael.min.js"
+  , "~/Scripts/plugins/morrisjs/morris.js"
+  , "~/Scripts/plugins/chartjs/Chart.bundle.js"
+  , "~/Scripts/plugins/flot-charts/jquery.flot.js"
+  , "~/Scripts/plugins/flot-charts/jquery.flot.resize.js"
+  , "~/Scripts/plugins/flot-charts/jquery.flot.pie.js"
+  , "~/Scripts/plugins/flot-charts/jquery.flot.categories.js"
+  , "~/Scripts/plugins/flot-charts/jquery.flot.time.js"
+  , "~/Scripts/plugins/jquery-sparkline/jquery.sparkline.js"
+  , "~/Scripts/admin.js"
+  , "~/Scripts/pages/index.js"
+  , "~/Scripts/demo.js"
+  , "~/Scripts/ui/modal.js"
+  , "~/Scripts/forms/basic-form-elements.js"
                  ));
 
 
 
             bundles.Add(new StyleBundle("~/Content/Theme").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/bootstrap-theme.css",
-                      "~/Content/Theme/css/bootstrap-admin-theme.css",
-                       "~/Content/Theme/css/site.css"));
-
-            bundles.Add(new StyleBundle("~/Content/Vendors").Include(
-                "~/Content/Theme/vendors/bootstrap-datepicker/css/datepicker.css"
-   , "~/Content/Theme/css/datepicker.fixes.css"
-   , "~/Content/Theme/vendors/uniform/themes/default/css/uniform.default.min.css"
-   , "~/Content/Theme/css/uniform.default.fixes.css"
-   , "~/Content/Theme/vendors/chosen.min.css"
-   , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/stylesheets/bootstrap-wysihtml5/core-b3.css"
-   , "~/Content/Theme/vendors/easypiechart/jquery.easy-pie-chart.css"
-   , "~/Content/Theme/vendors/easypiechart/jquery.easy-pie-chart_custom.css"
-   , "~/Content/Theme/vendors/bootstrap-wysihtml5-rails-b3/vendor/assets/stylesheets/bootstrap-wysihtml5/core-b3.css"
-   , "~/Content/Theme/vendors/jGrowl/jquery.jgrowl.css"
-   , "~/Content/Theme/vendors/bootstrap-datepicker/css/datepicker.css"
-    , "~/Content/Theme/vendors/fullcalendar/fullcalendar.css"));
+                         "~/Scripts/plugins/bootstrap/css/bootstrap.css"
+                        , "~/Scripts/plugins/node-waves/waves.css"
+                        , "~/Scripts/plugins/animate-css/animate.css"
+                        , "~/Scripts/plugins/morrisjs/morris.css"
+                        , "~/Content/style.css"
+                        , "~/Content/themes/all-themes.css"));
 
 
         }

@@ -24,5 +24,10 @@ namespace AzureIoT.FrontEnd.Controllers
         {
             return View();
         }
+
+        public ActionResult AddDeviceGroup()
+        {
+            return View();
+        }
     }
 }
