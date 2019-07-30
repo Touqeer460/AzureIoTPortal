@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace AzureIOT.Service
 {
-    internal class HardCodeValues : ISubscriptionService
+    public class HardCodeValues : ISubscriptionService
     {
         public Response<Device> GetDeviceDetail(string id)
         {
             return new Response<Device>()
             {
                 Success = true,
-                ResponseObject = new Device() { Id = id, Name = "New Device", Group = new DeviceGroup() { Id = "GRP-1", Name = "" }, LastActive = DateTime.Now, Status = Status.Active }
+                ResponseObject = new Device() { Id = id, Name = "New Device", Group = "GRP-1", LastActive = DateTime.Now, Status = Status.Active }
             };
         }
 
@@ -22,8 +22,8 @@ namespace AzureIOT.Service
                 Success = true,
                 ResponseObject = new List<Device>()
                 {
-                    new Device() { Id = "dev-1", Name = "New Device 1", Group = new DeviceGroup() { Id = "GRP-1", Name = "" }, LastActive = DateTime.Now, Status = Status.Active },
-                    new Device() { Id = "dev-2", Name = "New Device 2", Group = new DeviceGroup() { Id = "GRP-1", Name = "" }, LastActive = DateTime.Now, Status = Status.Active },
+                    new Device() { Id = "dev-1", Name = "New Device 1", Group = "GRP-1", LastActive = DateTime.Now, Status = Status.Active },
+                    new Device() { Id = "dev-2", Name = "New Device 2", Group = "GRP-1", LastActive = DateTime.Now, Status = Status.Active },
                 }
             };
         }
@@ -55,6 +55,24 @@ namespace AzureIOT.Service
                     {
                         new Telemetries(){ Name = "elevatorSensors:v1" }
                     }
+            };
+        }
+
+        public Response<Device> InsertDevice(Device device)
+        {
+            return new Response<Device>()
+            {
+                Success = true,
+                ResponseObject = new Device() { Id = "Hard-Code - 1", LastActive = DateTime.MinValue, Status = Status.NonFunctional }
+            };
+        }
+
+        public Response<Telemetries> InsertTelemetry(Telemetries telemetry)
+        {
+            return new Response<Telemetries>()
+            {
+                Success = true,
+                ResponseObject = new Telemetries() { Id = "Hard-Code - 1" }
             };
         }
     }

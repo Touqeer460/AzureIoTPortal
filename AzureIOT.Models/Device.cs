@@ -10,7 +10,7 @@ namespace AzureIOT.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public DeviceGroup Group { get; set; }
+        public string Group { get; set; }
         public Status Status { get; set; }
         public DateTime LastActive { get; set; }
     }

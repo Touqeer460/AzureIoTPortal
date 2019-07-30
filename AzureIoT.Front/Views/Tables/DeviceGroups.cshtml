@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<AzureIOT.Models.DeviceGroup>
+@{
     ViewBag.Title = "Device Groups";
 }
 
@@ -24,6 +25,26 @@
             v.innerHTML += '<i class="pull-right material-icons">clear</i>';
             document.getElementById('include').append(v);
         }
+    }
+    function savemodal(v) {
+        var obj = {};
+        obj.Name = $('#Name').val();
+        obj.Telemetries = [];
+        var settings = {
+            async: true,
+            crossDomain: true,
+            url: "/Tables/AddDeviceGroup",
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                "cache-control": "no-cache",
+            },
+            data: '{group: ' + JSON.stringify(obj) + '}',
+        };
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+            closemodal(v);
+        });
     }
 </script>
 <div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
@@ -77,7 +98,7 @@
 
                 <div class="row clearfix">
                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                        <button type="button" class="btn btn-primary m-t-15 waves-effect">SAVE</button>
+                        <button type="button" onclick="savemodal(this)" class="btn btn-primary m-t-15 waves-effect">SAVE</button>
                         <button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>
                     </div>
                 </div>
@@ -110,26 +131,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>grp-1</td>
-                                <td>Chiller</td>
-                                <td>chillerSensor:v1</td>
-                            </tr>
-                            <tr>
-                                <td>grp-2</td>
-                                <td>Truck</td>
-                                <td>truckSensors:v1</td>
-                            </tr>
-                            <tr>
-                                <td>grp-3</td>
-                                <td>Elevator</td>
-                                <td>elevatorSensors:v1</td>
-                            </tr>
-                            <tr>
-                                <td>grp-4</td>
-                                <td>Engine</td>
-                                <td>engineSensors:v1</td>
-                            </tr>
+                            @{
+                                foreach (var elem in Model)
+                                {
+                                    string val = "";
+                                    if (elem.Telemetries != null)
+                                    {
+                                        elem.Telemetries.ForEach(x => { val += (x.Name + elem.Id != elem.Telemetries.Last().Id ? ", " : ""); });
+                                    }
+                                    <tr>
+                                        <td>@elem.Id</td>
+                                        <td>@elem.Name</td>
+                                        <td>@val</td>
+                                    </tr>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
