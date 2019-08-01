@@ -19,7 +19,7 @@ namespace AzureIOT.DAL.DataProvider
         public DataProviderFile(string constr = "C:\\Data\\")//Change this if you want.
         {
             this.Connect(constr);
-            //Farrukh you have to change this HardCardValue to your class. new AzureSubscriptionClass.
+            //Farrukh you have to change this HardCardValue to your class. new AzureSubscriptionClass
             subscription = new HardCodeValues();
         }
 
