@@ -10,7 +10,7 @@ namespace AzureIOT.DAL.DataProvider
     public interface IDataService
     {
         bool Connect(string constr);
-        List<Device> GetAllDevices();
+        Task<List<Device>> GetAllDevices();
         Device GetDeviceInfo(string id);
         List<Telemetries> GetTelemetries();
         Telemetries GetTelemetryInfo(string id);

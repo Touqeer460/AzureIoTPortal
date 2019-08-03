@@ -57,6 +57,10 @@
       <Project>{8cf87663-b5d1-469c-8e82-a2b3079b5696}</Project>
       <Name>AzureIOT.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AzureIOTPortal.ConnectorService\AzureIOTPortal.ConnectorService.csproj">
+      <Project>{ed0ca471-3e55-4f35-a1e3-8bfaf248a827}</Project>
+      <Name>AzureIOTPortal.ConnectorService</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

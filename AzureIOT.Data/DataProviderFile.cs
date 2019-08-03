@@ -1,5 +1,5 @@
 ﻿using AzureIOT.Models;
-using AzureIOT.Service;
+using AzureIOT.ConnectorService;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace AzureIOT.DAL.DataProvider
         {
             this.Connect(constr);
             //Farrukh you have to change this HardCardValue to your class. new AzureSubscriptionClass
-            subscription = new HardCodeValues();
+            subscription = new AzureSubscriptionService();
         }
 
         public bool Connect(string constr)
@@ -29,7 +29,12 @@ namespace AzureIOT.DAL.DataProvider
             return true;
         }
 
-        public List<Device> GetAllDevices()
+        public async Task<Response<List<Device>>> GetAzureDevice()
+        {
+            return await subscription.GetDevicesListAsync();
+        }
+
+        public async Task<List<Device>> GetAllDevices()
         {
             string relativePath = $"{folderPathToStoreInfo}\\{devicePath}{format}";
             List<Device> azureDevices = subscription.GetDevicesList().ResponseObject;
@@ -37,12 +42,12 @@ namespace AzureIOT.DAL.DataProvider
             //Currently deploying this crude way to sync data.
             //Will update later.
             //Todo:
-            azureDevices.ForEach(x => 
+            azureDevices.ForEach(x =>
             {
-                if (localDevices.All(r=> r.Id != x.Id))
+                if (localDevices.All(r => r.Id != x.Id))
                 {
                     localDevices.Add(x);
-                    this.InsertDevice(x);
+                    this.InsertDeviceFileOnly(x);
                 }
             });
 
@@ -110,7 +115,7 @@ namespace AzureIOT.DAL.DataProvider
         public bool InsertDevice(Device device)
         {
             string relativePath = $"{folderPathToStoreInfo}\\{devicePath}{format}";
-            List<Device> devices = this.GetAllDevices();
+            List<Device> devices = this.GetAllDevicesForced();
             Response<Device> insert = subscription.InsertDevice(device);
             if (insert.Success)
             {
@@ -139,6 +144,23 @@ namespace AzureIOT.DAL.DataProvider
                 return true;
             }
             return false;
+        }
+
+        public List<Device> GetAllDevicesForced()
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{devicePath}{format}";
+            List<Device> localDevices = JsonConvert.DeserializeObject<List<Device>>(File.ReadAllText(relativePath)) ?? new List<Device>();
+            return localDevices;
+        }
+
+        public bool InsertDeviceFileOnly(Device device)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{devicePath}{format}";
+            List<Device> devices = this.GetAllDevicesForced();
+
+            devices.Add(device);
+            File.WriteAllText(relativePath, JsonConvert.SerializeObject(devices));
+            return true;
         }
     }
 }

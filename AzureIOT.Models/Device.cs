@@ -13,14 +13,24 @@ namespace AzureIOT.Models
         public string Group { get; set; }
         public Status Status { get; set; }
         public DateTime LastActive { get; set; }
+        public int CloudToDeviceMessages { get; set; }
+        public AuthTypes AuthType { get; set; }
+        public string PrimaryThumbprint { get; set; }
+        public string SecondaryThumbprint { get; set; }
     }
 
     public enum Status
     {
-        Active = 1,
-        Suspended = 0,
-        NonFunctional = 2,
-        Fault = 3
+        Enabled = 0,
+        Disabled = 1
+    }
+
+    public enum AuthTypes
+    {
+        Sas = 0,
+        SelfSigned = 1,
+        CertificateAuthority = 2,
+        None = 3
     }
 
 }

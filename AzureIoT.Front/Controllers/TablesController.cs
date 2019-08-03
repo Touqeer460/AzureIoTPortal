@@ -3,6 +3,7 @@ using AzureIOT.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace AzureIoT.FrontEnd.Controllers
@@ -18,11 +19,11 @@ namespace AzureIoT.FrontEnd.Controllers
 
         //
         // GET: /Table/
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             List<DeviceGroup> groups = dataService.GetAllGroups();
             ViewBag.Groups = groups;
-            return View(dataService.GetAllDevices());
+            return View(await dataService.GetAllDevices());
         }
 
         public ActionResult Telemetries()
