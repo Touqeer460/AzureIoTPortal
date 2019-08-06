@@ -7,6 +7,8 @@ using AzureIOT.Models;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Common.Exceptions;
 using Microsoft.Azure.Devices.Shared;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Device = AzureIOT.Models.Device;
 using RegistryManager = Microsoft.Azure.Devices.RegistryManager;
 
@@ -16,18 +18,21 @@ namespace AzureIOT.ConnectorService
     {
 
         RegistryManager registryManager;
-        public string connectionString;
+        private CloudBlockBlob blob;
+        private string connectionStringForPortal;
+        private string connectionStringForStorage;
 
         private Response<List<Device>> deviceResponse { get; set; }
 
-        public AzureSubscriptionService(string constr = "HostName=iotHub4jbagz366jxyq.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=ijus5i/Z0Pr0EFHFQuNcK4kpqI+34rPmgz+VbTHFZUw=")
+        public AzureSubscriptionService()
         {
-            this.connectionString = constr;
-            registryManager = RegistryManager.CreateFromConnectionString(connectionString);
+            this.connectionStringForPortal = "HostName=iotHub4jbagz366jxyq.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=ijus5i/Z0Pr0EFHFQuNcK4kpqI+34rPmgz+VbTHFZUw=";
+            this.connectionStringForStorage = "DefaultEndpointsProtocol=https;AccountName=storagegldwcmyk4hlua;AccountKey=verwBcgOlLj9O3QMKtpUbxKbnJpOSOEK/PYdao40Pxt3Lta0xyr1FC9/8ZfXu3IISlSMU+ggiyGjU389o1JqvA==;EndpointSuffix=core.windows.net";
+            registryManager = RegistryManager.CreateFromConnectionString(connectionStringForPortal);
         }
         public void GetDeviceListFromAzure()
         {
-            registryManager = RegistryManager.CreateFromConnectionString(connectionString);
+            registryManager = RegistryManager.CreateFromConnectionString(connectionStringForPortal);
             List<Device> localDevices = new List<Device>();
             IEnumerable<Microsoft.Azure.Devices.Device> azureDevice = new List<Microsoft.Azure.Devices.Device>();// = registryManager.GetDevicesAsync(100);
             Task task = Task.Run(() => { azureDevice = registryManager.GetDevicesAsync(100).Result; });
@@ -118,6 +123,7 @@ namespace AzureIOT.ConnectorService
 
         public Response<List<Telemetries>> GetTelemetries()
         {
+            //Your code here - 8/6/2019
             throw new NotImplementedException();
         }
 
@@ -128,6 +134,11 @@ namespace AzureIOT.ConnectorService
 
         public Response<Telemetries> InsertTelemetry(Telemetries telemetry)
         {
+            //Your code here - 8/6/2019
+            if (blob.Exists())
+            {
+                throw new NotImplementedException();
+            }
             throw new NotImplementedException();
         }
 
@@ -136,6 +147,22 @@ namespace AzureIOT.ConnectorService
             throw new NotImplementedException();
         }
 
-        //new Code
+        private bool SetupBlob()
+        {
+            try
+            {
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(this.connectionStringForStorage);
+                CloudBlobClient client = storageAccount.CreateCloudBlobClient();
+                CloudBlobContainer container = client.GetContainerReference("storagekaispe");
+                container.CreateIfNotExists();
+                string key = @"myCode.json";
+                blob = container.GetBlockBlobReference(key);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
