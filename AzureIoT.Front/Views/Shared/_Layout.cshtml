@@ -13,8 +13,32 @@
     <!-- Bootstrap Core Css -->
     @Styles.Render("~/Content/Theme")
     @Scripts.Render("~/bundles/modernizr")
+    <style>
+        .checked{
+            background-color:lightskyblue;
+        }
+        .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td{
+            border:0px solid #ddd !important;
+            margin-top:2px !important;
+        }
+        .search{
+            border-top:0px solid #ddd;
+            border-left:0px solid #ddd;
+            border-right:0px solid #ddd;
+            width: 90%;
+            margin-top: 10px;
+            margin-bottom: -10px;
+        }
+        .allow{
+            visibility:visible;
+
+        }
+        .remove{
+            visibility:hidden;
+        }
+    </style>
 </head>
-<body class="theme-red">
+<body class="theme-black">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -55,7 +79,7 @@
                 <a class="navbar-brand" href="~/">Azure IOT Web Portal</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right hidden">
                     <!-- Call Search -->
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
                     <!-- #END# Call Search -->
@@ -283,28 +307,34 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
-                        <a href="~/Tables">
-                            <i class="material-icons">home</i>
-                            <span>Devices</span>
+                        <a href="~/">
+                            <i class="material-icons">dashboard </i>
+                            <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
                         <a href="~/Tables/DeviceGroups">
-                            <i class="material-icons">group</i>
-                            <span>Device Groups</span>
+                            <i class="material-icons">group_work</i>
+                            <span>Device Group</span>
                         </a>
                     </li>
                     <li>
                         <a href="~/Tables/Telemetries">
-                            <i class="material-icons">extension</i>
-                            <span>Telemetries</span>
+                            <i class="material-icons">graphic_eq</i>
+                            <span>Telemetry</span>
                         </a>
                     </li>
-                    <li class="header">Administration</li>
+                    <li>
+                        <a href="~/Tables">
+                            <i class="material-icons"> devices_other</i>
+                            <span>Device</span>
+                        </a>
+                    </li>
+                    <li class="header"><i class="material-icons">build</i></li>
                     <li>
                         <a href="#">
-                            <i class="material-icons">layers</i>
-                            <span>Admin Area</span>
+                            
+                            <span>Administration</span>
                         </a>
                     </li>
                 </ul>
@@ -318,7 +348,7 @@
         </aside>
         <!-- #END# Left Sidebar -->
         <!-- Right Sidebar -->
-        <aside id="rightsidebar" class="right-sidebar">
+        <aside id="rightsidebar" class="right-sidebar hidden">
             <ul class="nav nav-tabs tab-nav-right" role="tablist">
                 <li role="presentation" class="active"><a href="#skins" data-toggle="tab">SKINS</a></li>
                 <li role="presentation"><a href="#settings" data-toggle="tab">SETTINGS</a></li>
@@ -326,7 +356,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade in active in active" id="skins">
                     <ul class="demo-choose-skin">
-                        <li data-theme="red" class="active">
+                        <li data-theme="red">
                             <div class="red"></div>
                             <span>Red</span>
                         </li>
@@ -402,7 +432,7 @@
                             <div class="blue-grey"></div>
                             <span>Blue Grey</span>
                         </li>
-                        <li data-theme="black">
+                        <li data-theme="black" class="active">
                             <div class="black"></div>
                             <span>Black</span>
                         </li>
@@ -467,5 +497,22 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/vendors")
+    <script>
+        function searchToggle(e) {
+            var v = $('.search')[0];
+            if (this.ofClass('allow', v)) {
+                v.classList.remove('allow');
+                v.classList.add('remove');
+            }
+            else {
+                v.classList.add('allow');
+                v.classList.remove('remove');
+
+            }
+        }
+        function ofClass(className, element) {
+            return (" " + element.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1;
+        }
+    </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 ﻿@model  List<AzureIOT.Models.Device>
 @{
-    ViewBag.Title = "Devices";
+    ViewBag.Title = "Device";
     List<AzureIOT.Models.DeviceGroup> groups = ViewBag.Groups;
 }
 <script>
@@ -33,6 +33,10 @@
           console.log(response);
         });
     }
+    function checkUncheck(v) {
+        var elem = v.parentNode;
+        elem.class = 'checked';
+    }
 </script>
 <div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
     <div class="modal-content">
@@ -43,7 +47,7 @@
             <form id="deviceForm" class="form-horizontal">
                 <div class="row clearfix">
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Device name</label>
+                        <label for="email_address_2">Name</label>
                     </div>
                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                         <div class="form-group">
@@ -55,7 +59,7 @@
                 </div>
                 <div class="row clearfix">
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Device group</label>
+                        <label for="email_address_2">Group</label>
                     </div>
                     <div class="col-sm-6">
                         <div class="callout">
@@ -91,16 +95,22 @@
         <div class="card">
             <div class="header">
                 <h2>
-                    DEVICES
-
-                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect">Add new</button>
+                    <i class="material-icons"> devices_other</i>
+                    DEVICE
+                    <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
+                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
+                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
                 </h2>
+                <div>
+                    <input type="text" class="search remove" placeholder="Enter search text here..." />
+                </div>
             </div>
             <div class="body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                    <table class="table table-hover js-basic-example dataTable">
                         <thead>
-                            <tr>
+                            <tr class="bg-blue">
+                                <th></th>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Device Group</th>
@@ -113,6 +123,7 @@
                                 foreach (var elem in Model)
                                 {
                                     <tr>
+                                        <td onclick="checkUncheck(this)"><input type="checkbox" /></td>
                                         <td>@elem.Id</td>
                                         <td>@elem.Name</td>
                                         <td>@elem.Group</td>

@@ -1,6 +1,6 @@
 ﻿@model List<AzureIOT.Models.DeviceGroup>
 @{
-    ViewBag.Title = "Device Groups";
+    ViewBag.Title = "Device Group";
 }
 
 <script>
@@ -56,45 +56,60 @@
             <form class="form-horizontal">
                 <div class="row clearfix">
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Group name</label>
+                        <label for="email_address_2">Group Id</label>
                     </div>
                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                         <div class="form-group">
                             <div class="form-line">
-                                <input type="text" id="email_address_2" class="form-control" placeholder="Enter group name">
+                                <input type="text" id="email_address_2" class="form-control" placeholder="Enter group ID" maxlength="10" required>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row clearfix">
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Group telemetries</label>
+                        <label for="email_address_2">Name</label>
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" id="email_address_2" class="form-control" placeholder="Enter group name" maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                        <label for="email_address_2">Telemetry</label>
                     </div>
 
-                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-6 card">
+                    <div class="col-lg-8 col-md-8 col-sm-4 col-xs-4 card">
                         <div class="body">
-                            <div class="col-lg-6 col-md-6">
+                            <div class="col-lg-5 col-md-5">
                                 <label for="email_address_2">Include</label>
                                 <div id="include" class="list-group">
-                                    <a onclick="swap(this)" class="list-group-item">chillerSensors:v1<i class="pull-right material-icons">clear</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">engineSensors:v1<i class="pull-right material-icons">clear</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">truckSensors:v1<i class="pull-right material-icons">clear</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">elevatorSensor:v1<i class="pull-right material-icons">clear</i></a>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6">
+                            <div class="col-md-2">
+                                <div>
+                                    <div class="content" style="margin-top:50px">
+                                        <i class="material-icons">swap_horiz</i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-5">
                                 <label for="email_address_2">Exclude</label>
                                 <div id="exclude" class="list-group">
-                                    <a onclick="swap(this)" class="list-group-item">chillerSensors:v2<i class="pull-right material-icons">add</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">engineSensors:v2<i class="pull-right material-icons">add</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">truckSensors:v2<i class="pull-right material-icons">add</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">elevatorSensor:v2<i class="pull-right material-icons">add</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">IP: Inlet Pressure<i class="pull-right material-icons">add</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">Temp: Temperature<i class="pull-right material-icons">add</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">cfm: CFM<i class="pull-right material-icons">add</i></a>
+                                    <a onclick="swap(this)" class="list-group-item">MP: Motor Power<i class="pull-right material-icons">add</i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <div class="row clearfix">
                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
@@ -115,19 +130,25 @@
         <div class="card">
             <div class="header">
                 <h2>
-                    DEVICE GROUPS
+                    <i class="material-icons">group_work</i>
+                    DEVICE GROUP
 
-                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect">Add new</button>
+                    <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
+                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
+                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
                 </h2>
+                <div>
+                    <input type="text" class="search remove" placeholder="Enter search text here..."/>
+                </div>
             </div>
             <div class="body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                    <table class="table table-hover js-basic-example dataTable">
                         <thead>
-                            <tr>
+                            <tr class="bg-blue">
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Telemetries</th>
+                                <th>Telemetry</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -135,9 +156,10 @@
                                 foreach (var elem in Model)
                                 {
                                     string val = "";
+                                    string last = elem.Telemetries.Last().Id;
                                     if (elem.Telemetries != null)
                                     {
-                                        elem.Telemetries.ForEach(x => { val += (x.Name + elem.Id != elem.Telemetries.Last().Id ? ", " : ""); });
+                                        elem.Telemetries.ForEach(x => { val += ((x.Id) + (x.Id != last ? ", " : "")); });
                                     }
                                     <tr>
                                         <td>@elem.Id</td>

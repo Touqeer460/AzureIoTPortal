@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureSubscriptionService.cs" />
+    <Compile Include="HardCodeValues.cs" />
     <Compile Include="ISubscriptionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

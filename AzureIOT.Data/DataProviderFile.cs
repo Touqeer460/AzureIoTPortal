@@ -20,7 +20,7 @@ namespace AzureIOT.DAL.DataProvider
         {
             this.Connect(constr);
             //Farrukh you have to change this HardCardValue to your class. new AzureSubscriptionClass
-            subscription = new AzureSubscriptionService();
+            subscription = new HardCodeValues();
         }
 
         public bool Connect(string constr)
@@ -57,7 +57,17 @@ namespace AzureIOT.DAL.DataProvider
         public List<DeviceGroup> GetAllGroups()
         {
             string relativePath = $"{folderPathToStoreInfo}\\{groupPath}{format}";
-            return JsonConvert.DeserializeObject<List<DeviceGroup>>(File.ReadAllText(relativePath)) ?? new List<DeviceGroup>();
+            List<DeviceGroup> savedGroups = new List<DeviceGroup>();// this.GetAllDeviceGroupsForced();
+            List<DeviceGroup> localGroups = this.GetAllDeviceGroupsForced();
+            savedGroups.ForEach(x =>
+            {
+                if (localGroups.All(r => r.Id != x.Id))
+                {
+                    localGroups.Add(x);
+                    this.InsertDeviceGroupFileOnly(x);
+                }
+            });
+            return localGroups;
         }
 
         public Device GetDeviceInfo(string id)
@@ -106,7 +116,7 @@ namespace AzureIOT.DAL.DataProvider
         public bool InsertGroup(DeviceGroup group)
         {
             string relativePath = $"{folderPathToStoreInfo}\\{groupPath}{format}";
-            List<DeviceGroup> groups = this.GetAllGroups();
+            List<DeviceGroup> groups = this.GetAllDeviceGroupsForced();
             groups.Add(group);
             File.WriteAllText(relativePath, JsonConvert.SerializeObject(groups));
             return true;
@@ -133,7 +143,7 @@ namespace AzureIOT.DAL.DataProvider
         public bool InsertTelemetry(Telemetries telemetry)
         {
             string relativePath = $"{folderPathToStoreInfo}\\{telemetriesPath}{format}";
-            List<Telemetries> telemetries = this.GetTelemetries();
+            List<Telemetries> telemetries = this.GetAllTelemetriesForced();
             Response<Telemetries> insert = subscription.InsertTelemetry(telemetry);
             if (insert.Success)
             {
@@ -160,6 +170,40 @@ namespace AzureIOT.DAL.DataProvider
 
             devices.Add(device);
             File.WriteAllText(relativePath, JsonConvert.SerializeObject(devices));
+            return true;
+        }
+
+        public List<Telemetries> GetAllTelemetriesForced()
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{telemetriesPath}{format}";
+            List<Telemetries> localTelemetries = JsonConvert.DeserializeObject<List<Telemetries>>(File.ReadAllText(relativePath)) ?? new List<Telemetries>();
+            return localTelemetries;
+        }
+
+        public bool InsertTelemetryFileOnly(Telemetries telemetry)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{telemetriesPath}{format}";
+            List<Telemetries> telemetries = this.GetAllTelemetriesForced();
+
+            telemetries.Add(telemetry);
+            File.WriteAllText(relativePath, JsonConvert.SerializeObject(telemetries));
+            return true;
+        }
+
+        public List<DeviceGroup> GetAllDeviceGroupsForced()
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{groupPath}{format}";
+            List<DeviceGroup> localGroups = JsonConvert.DeserializeObject<List<DeviceGroup>>(File.ReadAllText(relativePath)) ?? new List<DeviceGroup>();
+            return localGroups;
+        }
+
+        public bool InsertDeviceGroupFileOnly(DeviceGroup group)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{groupPath}{format}";
+            List<DeviceGroup> groups = this.GetAllDeviceGroupsForced();
+
+            groups.Add(group);
+            File.WriteAllText(relativePath, JsonConvert.SerializeObject(groups));
             return true;
         }
     }

@@ -1,127 +1,148 @@
 ﻿@model  List<AzureIOT.Models.Telemetries>
-@{
-    ViewBag.Title = "Telemetries";
-}
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
-<script type="text/javascript" src="js/plugins/localisation/jquery.localisation-min.js"></script>
-<script type="text/javascript" src="js/plugins/scrollTo/jquery.scrollTo-min.js"></script>
-<script type="text/javascript" src="js/ui.multiselect.js"></script>
-<script>
-    function modal(v) {
-        $('#defaultModal').removeClass('hidden');
-        $('#content').addClass('hidden');
+    @{
+        ViewBag.Title = "Telemetry";
     }
-    function closemodal(v) {
-        $('#defaultModal').addClass('hidden');
-        $('#content').removeClass('hidden');
-    }
-    $(function () {
-        $.localise('ui-multiselect', {/*language: 'en',*/ path: 'js/locale/' });
-        $(".multiselect").multiselect();
-        $('#switcher').themeswitcher();
-    });
-    function savemodal(v) {
-        var obj = {};
-        obj.Name = $('#Name').val();
-        obj.Unit = $("#Unit").val();
-        var settings = {
-            async: true,
-            crossDomain: true,
-            url: "Tables/AddTelemetry",
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-                "cache-control": "no-cache",
-            },
-            data: '{device: ' + JSON.stringify(obj) + '}',
-        };
-        $.ajax(settings).done(function (response) {
-            console.log(response);
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/plugins/localisation/jquery.localisation-min.js"></script>
+    <script type="text/javascript" src="js/plugins/scrollTo/jquery.scrollTo-min.js"></script>
+    <script type="text/javascript" src="js/ui.multiselect.js"></script>
+    <script>
+        function modal(v) {
+            $('#defaultModal').removeClass('hidden');
+            $('#content').addClass('hidden');
+        }
+        function closemodal(v) {
+            $('#defaultModal').addClass('hidden');
+            $('#content').removeClass('hidden');
+        }
+        $(function () {
+            $.localise('ui-multiselect', {/*language: 'en',*/ path: 'js/locale/' });
+            $(".multiselect").multiselect();
+            $('#switcher').themeswitcher();
         });
-    }
-</script>
-<div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title" id="defaultModalLabel">Add a telemetry</h4>
-        </div>
-        <div class="body">
-            <form class="form-horizontal">
-                <div class="row clearfix">
-                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Name</label>
-                    </div>
-                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <input type="text" id="Name" class="form-control" placeholder="Enter name">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row clearfix">
-                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Unit</label>
-                    </div>
-                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <input type="text" id="Unit" class="form-control" placeholder="Enter unit">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row clearfix">
-                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                        <button type="button" onclick="savemodal(this)" class="btn btn-primary m-t-15 waves-effect">SAVE</button>
-                        <button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <br />
-    </div>
-</div>
-
-<div class="row clearfix">
-    <div id="content" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
-            <div class="header">
-                <h2>
-                    TELEMETRY
-
-                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect">Add new</button>
-                </h2>
+        function savemodal(v) {
+            var obj = {};
+            obj.Name = $('#Name').val();
+            obj.Unit = $("#Unit").val();
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "Tables/AddTelemetry",
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache",
+                },
+                data: '{device: ' + JSON.stringify(obj) + '}',
+            };
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            });
+        }
+    </script>
+    <div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Add a telemetry</h4>
             </div>
             <div class="body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Unit</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                foreach (var elem in Model)
-                                {
-                                    <tr>
-                                        <td>@elem.Id</td>
-                                        <td>@elem.Name</td>
-                                        <td>@elem.Unit</td>
-                                    </tr>
+                <form class="form-horizontal">
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">ID</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="Name" class="form-control" maxlength="10" required placeholder="Enter ID">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Name</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="Name" class="form-control" maxlength="50" placeholder="Enter name">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Unit</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="Unit" class="form-control" maxlength="10" placeholder="Enter unit">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                            <button type="submit" onclick="savemodal(this)" class="btn btn-primary m-t-15 waves-effect">SAVE</button>
+                            <button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br />
+        </div>
+    </div>
+
+    <div class="row clearfix">
+        <div id="content" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        <i class="material-icons">graphic_eq</i>
+                        TELEMETRY
+
+                        <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
+                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
+                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
+                    </h2>
+                    <div>
+                        <input type="text" class="search remove" placeholder="Enter search text here..." />
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Unit</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var elem in Model)
+                                    {
+                                        <tr class="secondary">
+                                            <td>@elem.Id</td>
+                                            <td>@elem.Name</td>
+                                            <td>@elem.Unit</td>
+                                            <td><a href="#">Edit</a></td>
+                                        </tr>
+                                    }
                                 }
-                            }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- #END# Basic Examples -->
+    <!-- #END# Basic Examples -->
