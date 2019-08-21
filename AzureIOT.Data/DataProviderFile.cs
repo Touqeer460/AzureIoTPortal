@@ -20,7 +20,8 @@ namespace AzureIOT.DAL.DataProvider
         {
             this.Connect(constr);
             //Farrukh you have to change this HardCardValue to your class. new AzureSubscriptionClass
-            subscription = new HardCodeValues();
+            //subscription = new HardCodeValues();
+            subscription = new AzureSubscriptionService();
         }
 
         public bool Connect(string constr)
@@ -92,16 +93,16 @@ namespace AzureIOT.DAL.DataProvider
         {
             string relativePath = $"{folderPathToStoreInfo}\\{telemetriesPath}{format}";
             List<Telemetries> azureTelemetries = subscription.GetTelemetries().ResponseObject;
-            List<Telemetries> localTelemetries = new List<Telemetries>();
-            azureTelemetries.ForEach(x =>
-            {
-                if (localTelemetries.All(r => r.Id != x.Id))
-                {
-                    localTelemetries.Add(x);
-                    this.InsertTelemetry(x);
-                }
-            });
-            return localTelemetries;
+            //List<Telemetries> localTelemetries = new List<Telemetries>();
+            //azureTelemetries.ForEach(x =>
+            //{
+            //    if (localTelemetries.All(r => r.Id != x.Id))
+            //    {
+            //        localTelemetries.Add(x);
+            //        this.InsertTelemetry(x);
+            //    }
+            //});
+            return azureTelemetries;
         }
 
         public Telemetries GetTelemetryInfo(string id)

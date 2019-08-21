@@ -156,7 +156,12 @@
                                 foreach (var elem in Model)
                                 {
                                     string val = "";
-                                    string last = elem.Telemetries.Last().Id;
+                                    string last = "";
+                                    if (elem != null && elem.Telemetries != null && elem.Telemetries.Last() != null)
+                                    {
+                                        last = elem.Telemetries.Last().Id;
+                                    }
+                                    
                                     if (elem.Telemetries != null)
                                     {
                                         elem.Telemetries.ForEach(x => { val += ((x.Id) + (x.Id != last ? ", " : "")); });

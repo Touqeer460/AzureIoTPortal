@@ -10,5 +10,6 @@ namespace AzureIOT.Models
     {
         //ToDo:
         //To be implemented
+        public object telemetryId { get; set; }
     }
 }
