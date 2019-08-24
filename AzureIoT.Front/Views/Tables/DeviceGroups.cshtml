@@ -1,178 +1,194 @@
-﻿@model List<AzureIOT.Models.DeviceGroup>
-@{
-    ViewBag.Title = "Device Group";
-}
-
-<script>
-    function modal(v) {
-        $('#defaultModal').removeClass('hidden');
-        $('#content').addClass('hidden');
+﻿@using AzureIOT.Models;
+@model List<AzureIOT.Models.DeviceGroup>
+    @{
+        ViewBag.Title = "Device Group";
+        List<Telemetries> telem = ViewBag.Telemetries;
     }
-    function closemodal(v) {
-        $('#defaultModal').addClass('hidden');
-        $('#content').removeClass('hidden');
-    }
-    function swap(v) {
-        v.removeChild(v.getElementsByTagName("i")[0]);
-        var parent = v.parentElement;
-        parent.removeChild(v);
 
-        if (parent.id == 'include') {
-            v.innerHTML += '<i class="pull-right material-icons">add</i>';
-            document.getElementById('exclude').append(v);
+    <script>
+        function modal(v) {
+            $('#defaultModal').removeClass('hidden');
+            $('#content').addClass('hidden');
         }
-        else {
-            v.innerHTML += '<i class="pull-right material-icons">clear</i>';
-            document.getElementById('include').append(v);
+        function closemodal(v) {
+            $('#defaultModal').addClass('hidden');
+            $('#content').removeClass('hidden');
         }
-    }
-    function savemodal(v) {
-        var obj = {};
-        obj.Name = $('#Name').val();
-        obj.Telemetries = [];
-        var settings = {
-            async: true,
-            crossDomain: true,
-            url: "/Tables/AddDeviceGroup",
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-                "cache-control": "no-cache",
-            },
-            data: '{group: ' + JSON.stringify(obj) + '}',
-        };
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-            closemodal(v);
-        });
-    }
-</script>
-<div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title" id="defaultModalLabel">Create new device group</h4>
-        </div>
-        <div class="body">
-            <form class="form-horizontal">
-                <div class="row clearfix">
-                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Group Id</label>
-                    </div>
-                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <input type="text" id="email_address_2" class="form-control" placeholder="Enter group ID" maxlength="10" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row clearfix">
-                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Name</label>
-                    </div>
-                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <input type="text" id="email_address_2" class="form-control" placeholder="Enter group name" maxlength="50">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <div class="row clearfix">
-                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                        <label for="email_address_2">Telemetry</label>
-                    </div>
+        function swap(v) {
+            v.removeChild(v.getElementsByTagName("i")[0]);
+            var parent = v.parentElement;
+            parent.removeChild(v);
 
-                    <div class="col-lg-8 col-md-8 col-sm-4 col-xs-4 card">
-                        <div class="body">
-                            <div class="col-lg-5 col-md-5">
-                                <label for="email_address_2">Include</label>
-                                <div id="include" class="list-group">
+            if (parent.id == 'include') {
+                v.innerHTML += '<i class="pull-right material-icons">add</i>';
+                document.getElementById('exclude').append(v);
+            }
+            else {
+                v.innerHTML += '<i class="pull-right material-icons">clear</i>';
+                document.getElementById('include').append(v);
+            }
+        }
+        function savemodal(v) {
+            var obj = {};
+            obj.Id = $('#Id').val();
+            obj.Name = $('#Name').val();
+            obj.Telemetries = [];
+
+            var telems = $('#include').children();
+            for (var i = 0; i < telems.length; i++) {
+                var val = telems[i].id;
+                if (i != telems.length - 1) {
+                    val += ',';
+                }
+                obj.Telemetries += val;
+            }
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "/Tables/AddDeviceGroup",
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache",
+                },
+                data: '{group: ' + JSON.stringify(obj) + '}',
+            };
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                closemodal(v);
+            });
+        }
+    </script>
+    <div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Create new device group</h4>
+            </div>
+            <div class="body">
+                <form class="form-horizontal">
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Group Id</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="Id" class="form-control" placeholder="Enter group ID" maxlength="10" required>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div>
-                                    <div class="content" style="margin-top:50px">
-                                        <i class="material-icons">swap_horiz</i>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Name</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="Name" class="form-control" placeholder="Enter group name" maxlength="50">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Telemetry</label>
+                        </div>
+
+                        <div class="col-lg-8 col-md-8 col-sm-4 col-xs-4 card">
+                            <div class="body">
+                                <div class="col-lg-5 col-md-5">
+                                    <label for="email_address_2">Include</label>
+                                    <div id="include" class="list-group">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div>
+                                        <div class="content" style="margin-top:50px">
+                                            <i class="material-icons">swap_horiz</i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-md-5">
+                                    <label for="email_address_2">Exclude</label>
+                                    <div id="exclude" class="list-group">
+                                        @foreach (var v in telem)
+                                        {
+                                            <a onclick="swap(this)" class="list-group-item" id ="@v.telemeteryId" name="@v.telemeteryId">@v.telemeteryId: @v.telemeteryName<i class="pull-right material-icons">add</i></a>
+                                        }
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-5 col-md-5">
-                                <label for="email_address_2">Exclude</label>
-                                <div id="exclude" class="list-group">
-                                    <a onclick="swap(this)" class="list-group-item">IP: Inlet Pressure<i class="pull-right material-icons">add</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">Temp: Temperature<i class="pull-right material-icons">add</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">cfm: CFM<i class="pull-right material-icons">add</i></a>
-                                    <a onclick="swap(this)" class="list-group-item">MP: Motor Power<i class="pull-right material-icons">add</i></a>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row clearfix">
-                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                        <button type="button" onclick="savemodal(this)" class="btn btn-primary m-t-15 waves-effect">SAVE</button>
-                        <button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>
+                    <div class="row clearfix">
+                        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                            <button type="button" onclick="savemodal(this)" class="btn btn-primary m-t-15 waves-effect">SAVE</button>
+                            <button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <br />
+
+        </div>
+    </div>
+
+    <div class="row clearfix">
+        <div id="content" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        <i class="material-icons">group_work</i>
+                        DEVICE GROUP
+
+                        <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
+                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
+                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
+                    </h2>
+                    <div>
+                        <input type="text" class="search remove" placeholder="Enter search text here..." />
                     </div>
                 </div>
-            </form>
-
-        </div>
-        <br />
-
-    </div>
-</div>
-
-<div class="row clearfix">
-    <div id="content" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
-            <div class="header">
-                <h2>
-                    <i class="material-icons">group_work</i>
-                    DEVICE GROUP
-
-                    <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
-                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
-                    <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
-                </h2>
-                <div>
-                    <input type="text" class="search remove" placeholder="Enter search text here..."/>
-                </div>
-            </div>
-            <div class="body">
-                <div class="table-responsive">
-                    <table class="table table-hover js-basic-example dataTable">
-                        <thead>
-                            <tr class="bg-blue">
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Telemetry</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                foreach (var elem in Model)
-                                {
-                                    string val = "";
-                                    string last = elem.Telemetries.Last().Id;
-                                    if (elem.Telemetries != null)
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Telemetry</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var elem in Model)
                                     {
-                                        elem.Telemetries.ForEach(x => { val += ((x.Id) + (x.Id != last ? ", " : "")); });
+                                        string val = "";
+                                        string last = "";
+                                        if (elem.Telemetries != null)
+                                        {
+                                            last = elem.Telemetries.Last();
+                                        }
+                                        if (elem.Telemetries != null)
+                                        {
+                                            elem.Telemetries.ToList().ForEach(x => { val += ((x) + (x != last ? ", " : "")); });
+                                        }
+                                        <tr>
+                                            <td>@elem.Id</td>
+                                            <td>@elem.Name</td>
+                                            <td>@val</td>
+                                        </tr>
                                     }
-                                    <tr>
-                                        <td>@elem.Id</td>
-                                        <td>@elem.Name</td>
-                                        <td>@val</td>
-                                    </tr>
                                 }
-                            }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- #END# Basic Examples -->
+    <!-- #END# Basic Examples -->

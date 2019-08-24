@@ -12,7 +12,6 @@ namespace AzureIOT.Models
         [Key]
         public string Id { get; set; }
         public string Name { get; set; }
-
-        public List<Telemetries> Telemetries { get; set; }
+        public string[] Telemetries { get; set; }
     }
 }

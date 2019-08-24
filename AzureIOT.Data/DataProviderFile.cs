@@ -13,14 +13,14 @@ namespace AzureIOT.DAL.DataProvider
     public class DataProviderFile : IDataService
     {
         string folderPathToStoreInfo;
-        const string format = ".json", devicePath = "devices", groupPath = "groups", telemetriesPath = "telemetries";
+        const string format = ".json", devicePath = "devices", groupPath = "groups", telemetriesPath = "telemetries", rulesPath = "rules";
         ISubscriptionService subscription;
 
-        public DataProviderFile(string constr = "C:\\Data\\")//Change this if you want.
+        public DataProviderFile(string constr = "D:\\home\\site\\wwwroot\\Data")//Change this if you want.
         {
             this.Connect(constr);
             //Farrukh you have to change this HardCardValue to your class. new AzureSubscriptionClass
-            subscription = new HardCodeValues();
+            subscription = new AzureSubscriptionService();
         }
 
         public bool Connect(string constr)
@@ -57,7 +57,7 @@ namespace AzureIOT.DAL.DataProvider
         public List<DeviceGroup> GetAllGroups()
         {
             string relativePath = $"{folderPathToStoreInfo}\\{groupPath}{format}";
-            List<DeviceGroup> savedGroups = new List<DeviceGroup>();// this.GetAllDeviceGroupsForced();
+            List<DeviceGroup> savedGroups = subscription.GetGroupsList().ResponseObject;
             List<DeviceGroup> localGroups = this.GetAllDeviceGroupsForced();
             savedGroups.ForEach(x =>
             {
@@ -95,7 +95,7 @@ namespace AzureIOT.DAL.DataProvider
             List<Telemetries> localTelemetries = new List<Telemetries>();
             azureTelemetries.ForEach(x =>
             {
-                if (localTelemetries.All(r => r.Id != x.Id))
+                if (x.telemeteryId != "" && localTelemetries.All(r => r.telemeteryId != x.telemeteryId))
                 {
                     localTelemetries.Add(x);
                     this.InsertTelemetry(x);
@@ -108,8 +108,8 @@ namespace AzureIOT.DAL.DataProvider
         {
             string relativePath = $"{folderPathToStoreInfo}\\{telemetriesPath}{format}";
             List<Telemetries> data = JsonConvert.DeserializeObject<List<Telemetries>>(File.ReadAllText(relativePath));
-            if (data.Where(x => x.Id == id) != null)
-                return data.Where(x => x.Id == id).First();
+            if (data.Where(x => x.telemeteryId == id) != null)
+                return data.Where(x => x.telemeteryId == id).First();
             return null;
         }
 
@@ -117,6 +117,7 @@ namespace AzureIOT.DAL.DataProvider
         {
             string relativePath = $"{folderPathToStoreInfo}\\{groupPath}{format}";
             List<DeviceGroup> groups = this.GetAllDeviceGroupsForced();
+            subscription.InsertGroup(group);
             groups.Add(group);
             File.WriteAllText(relativePath, JsonConvert.SerializeObject(groups));
             return true;
@@ -147,7 +148,7 @@ namespace AzureIOT.DAL.DataProvider
             Response<Telemetries> insert = subscription.InsertTelemetry(telemetry);
             if (insert.Success)
             {
-                telemetry.Id = insert.ResponseObject.Id;
+                telemetry.telemeteryId = insert.ResponseObject.telemeteryId;
 
                 telemetries.Add(telemetry);
                 File.WriteAllText(relativePath, JsonConvert.SerializeObject(telemetries));
@@ -204,6 +205,36 @@ namespace AzureIOT.DAL.DataProvider
 
             groups.Add(group);
             File.WriteAllText(relativePath, JsonConvert.SerializeObject(groups));
+            return true;
+        }
+
+        public List<Rules> GetAllRules()
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{rulesPath}{format}";
+            List<Rules> azureRules = subscription.GetRulesList().ResponseObject;
+            List<Rules> localRules = JsonConvert.DeserializeObject<List<Rules>>(File.ReadAllText(relativePath)) ?? new List<Rules>();
+            return localRules;
+        }
+
+        public Rules GetRuleInfo(string id)
+        {
+            List<Rules> localRules = this.GetAllRules();
+            if (localRules.Count() > 0)
+            {
+                IEnumerable<Rules> rule = localRules.Where(x => x.Id == id);
+                return rule != null ? rule.First() : new Rules();
+            }
+            return new Rules();
+        }
+
+        public bool InsertRule(Rules rule)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{rulesPath}{format}";
+            subscription.InsertRule(rule);
+            List<Rules> rules = this.GetAllRules();
+
+            rules.Add(rule);
+            File.WriteAllText(relativePath, JsonConvert.SerializeObject(rules));
             return true;
         }
     }

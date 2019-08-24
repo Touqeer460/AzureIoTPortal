@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AzureIOT.ConnectorService
 {
-    public class HardCodeValues : ISubscriptionService
+    public class HardCodeValues //: ISubscriptionService
     {
         public Response<Device> GetDeviceDetail(string id)
         {
@@ -54,7 +54,7 @@ namespace AzureIOT.ConnectorService
                     Name = device.Name,
                     Telemetries = new List<TelemetryValue>()
                     {
-                        new TelemetryValue(){ Telemetry = new Telemetries(){ Name = "elevatorSensors:v1"}, Value = 5.0}
+                        new TelemetryValue(){ Telemetry = new Telemetries(){ telemeteryName = "elevatorSensors:v1"}, Value = 5.0}
                     }
                 }
             };
@@ -67,10 +67,10 @@ namespace AzureIOT.ConnectorService
                 Success = true,
                 ResponseObject = new List<Telemetries>()
                     {
-                        new Telemetries(){ Id = "IP", Name = "Inlet Pressure", Unit = "psi" },
-                        new Telemetries(){ Id = "Temp", Name = "Temperature", Unit = "F" },
-                        new Telemetries(){ Id = "cfm", Name = "CFM", Unit = "m3/min" },
-                        new Telemetries(){ Id = "mp", Name = "Motor Power", Unit = "HP" }
+                        new Telemetries(){ telemeteryId = "IP", telemeteryName = "Inlet Pressure", telemeteryUnit = "psi" },
+                        new Telemetries(){ telemeteryId = "Temp", telemeteryName = "Temperature", telemeteryUnit = "F" },
+                        new Telemetries(){ telemeteryId = "cfm", telemeteryName = "CFM", telemeteryUnit = "m3/min" },
+                        new Telemetries(){ telemeteryId = "mp", telemeteryName = "Motor Power", telemeteryUnit = "HP" }
                     }
             };
         }
@@ -89,7 +89,7 @@ namespace AzureIOT.ConnectorService
             return new Response<Telemetries>()
             {
                 Success = true,
-                ResponseObject = new Telemetries() { Id = telemetry.Id }
+                ResponseObject = new Telemetries() { telemeteryId = telemetry.telemeteryId }
             };
         }
     }

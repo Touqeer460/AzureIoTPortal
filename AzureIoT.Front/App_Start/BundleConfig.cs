@@ -68,7 +68,6 @@ namespace AzureIoT.FrontEnd
   , "~/Content/Theme/vendors/fullcalendar/fullcalendar.js"
   , "~/Scripts/plugins/jquery/jquery.min.js"
   , "~/Scripts/plugins/bootstrap/js/bootstrap.js"
-  , "~/Scripts/plugins/bootstrap-select/js/bootstrap-select.js"
   , "~/Scripts/plugins/jquery-slimscroll/jquery.slimscroll.js"
   , "~/Scripts/plugins/node-waves/waves.js"
   , "~/Scripts/plugins/jquery-countto/jquery.countTo.js"

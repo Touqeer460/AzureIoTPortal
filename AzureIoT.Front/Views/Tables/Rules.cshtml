@@ -1,0 +1,203 @@
+﻿@using AzureIOT.Models
+@model  List<AzureIOT.Models.Rules>
+    @{
+        ViewBag.Title = "Rules";
+        var groups = ViewBag.Groups;
+        var telemetries = ViewBag.Telemetries;
+        var operators = ViewBag.Operators;
+        var telemetrySelect = "<select class=\"form-control ruleTelemetry\">";
+        var operatorSelect = "<select class=\"form-control ruleOperator\">";
+        var operatorString = "";
+        var optionsString = "";
+        foreach (var i in telemetries)
+        {
+            optionsString += "<option value=\"" + i.telemeteryId + "\">" + i.telemeteryName + "</option>";
+        }
+        telemetrySelect += optionsString;
+        telemetrySelect += "</select>";
+
+        foreach (var i in operators)
+        {
+            operatorString += "<option>" + i + "</option>";
+        }
+        operatorSelect += operatorString;
+        operatorSelect += "</select>";
+    }
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+    <script>
+        function modal(v) {
+            $('#defaultModal').removeClass('hidden');
+            $('#content').addClass('hidden');
+        }
+        function closemodal(v) {
+            $('#defaultModal').addClass('hidden');
+            $('#content').removeClass('hidden');
+        }
+        $(function () {
+            $.localise('ui-multiselect', {/*language: 'en',*/ path: 'js/locale/' });
+            $(".multiselect").multiselect();
+            $('#switcher').themeswitcher();
+        });
+        function savemodal(v) {
+            var obj = {};
+            obj.Id = $('#Id').val();
+            obj.DeviceGroup = $("#Group").val();
+            obj.Name = $('#Name').val();
+            obj.RuleSets = [];
+            var rules = $('#ruleSet').children();
+            for (var i = 0; i < rules.length; i++) {
+                var ruleSet = {};
+                var set = rules[i];
+                ruleSet.Telemetry = set.getElementsByClassName('ruleTelemetry')[0].value;
+                ruleSet.Operator = set.getElementsByClassName('ruleOperator')[0].value;
+                ruleSet.Value = set.getElementsByClassName('ruleValue')[0].value;
+                obj.RuleSets.push(ruleSet);
+            }
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "/Tables/AddRule",
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache",
+                },
+                data: '{rule: ' + JSON.stringify(obj) + '}',
+            };
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            });
+        }
+        function addRuleSet(v) {
+            var n = document.getElementById('ruleSet');
+            n.innerHTML += '<div class="row"><div class=" border border-warning"><div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"><label for="email_address_2">Telemetry</label></div><div class="col-lg-10 col-md-10 col-sm-8 col-xs-7"><div class="form-group"><div class="form-line">@Html.Raw(telemetrySelect)</div></div></div></div><div class=" clearfix"><div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"><label for="email_address_2">Operator</label></div><div class="col-lg-10 col-md-10 col-sm-8 col-xs-7"><div class="form-group"><div class="form-line">@Html.Raw(operatorSelect)</div></div></div></div><div class=" clearfix"><div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"><label for="email_address_2">Value</label></div><div class="col-lg-10 col-md-10 col-sm-8 col-xs-7"><div class="form-group"><div class="form-line"><input type="text" id="Value" class="form-control ruleValue" maxlength="50" placeholder="Enter Value"></div></div></div></div><div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"></div><div class="col-lg-10 col-md-10 col-sm-8 col-xs-7"><button style="padding: 5px; margin-top: 5px" class="btn btn-xs bg-red waves-effect" onclick="removeRuleSet(this)">Remove</button></div></div>';
+        }
+        function removeRuleSet(v) {
+            var n = v.parentElement;
+            var d = n.parentElement;
+            var rem = document.getElementById('ruleSet');
+            rem.removeChild(d);
+        }
+    </script>
+    <div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Add a rule</h4>
+            </div>
+            <div class="body">
+                <form class="form-horizontal">
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">ID</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="Name" class="form-control" maxlength="10" required placeholder="Enter ID">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Name</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="Name" class="form-control" maxlength="50" placeholder="Enter name">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                            <label for="email_address_2">Device Group</label>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <select id="Group" class="form-control">
+                                        @foreach(var v in groups)
+                                        {
+                                            <option value="@v.Id">@v.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h2>
+                            <button type="button" class=" pull-right btn bg-orange waves-effect" onclick="addRuleSet(this)" style="margin-right:50px">Add Rule Set</button>
+                        </h2>
+                    </div>
+                    <div class="row" id="ruleSet">
+
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                            <button type="submit" onclick="savemodal(this)" class="btn btn-primary m-t-15 waves-effect">SAVE</button>
+                            <button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br />
+        </div>
+    </div>
+
+    <div class="row clearfix">
+        <div id="content" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        <i class="material-icons">graphic_eq</i>
+                        RULES
+
+                        <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
+                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
+                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
+                    </h2>
+                    <div>
+                        <input type="text" class="search remove" placeholder="Enter search text here..." />
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Device Group</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var elem in Model)
+                                    {
+                                        <tr class="secondary">
+                                            <td>@elem.Id</td>
+                                            <td>@elem.Name</td>
+                                            <td>@elem.DeviceGroup</td>
+                                            <td>@elem.Severity</td>
+                                            <td>@elem.Status</td>
+                                            <td><a href="#">Edit</a></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Basic Examples -->

@@ -33,11 +33,17 @@ namespace AzureIoT.FrontEnd.Controllers
 
         public ActionResult DeviceGroups()
         {
+            List<Telemetries> telemetries = dataService.GetTelemetries();
+            ViewBag.Telemetries = telemetries;
             return View(dataService.GetAllGroups());
         }
 
         public bool AddDeviceGroup(DeviceGroup group)
         {
+            if (group != null && group.Telemetries != null && group.Telemetries.Length == 1)
+            {
+                group.Telemetries = group.Telemetries[0].Split(',');
+            }
             return dataService.InsertGroup(group);
         }
 
@@ -49,6 +55,23 @@ namespace AzureIoT.FrontEnd.Controllers
         public bool AddTelemetry(Telemetries telemetry)
         {
             return dataService.InsertTelemetry(telemetry);
+        }
+
+        public bool AddRule(Rules rule)
+        {
+            return dataService.InsertRule(rule);
+        }
+
+        public ActionResult Rules()
+        {
+            ViewBag.Groups = dataService.GetAllGroups();
+            ViewBag.Telemetries = dataService.GetTelemetries();
+            ViewBag.Operators = AzureIOT.Models.Rules.AllowedOperators();
+            return View(dataService.GetAllRules());
+        }
+        public ActionResult RuleDetails(string Id)
+        {
+            return View(dataService.GetRuleInfo(Id));
         }
     }
 }

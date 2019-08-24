@@ -17,7 +17,11 @@ namespace AzureIOT.ConnectorService
         Response<Telemetries> InsertTelemetry(Telemetries telemetry);
 
         Task<Response<List<Device>>> GetDevicesListAsync();
+        Response<Rules> InsertRule(Rules rule);
+        Response<List<Rules>> GetRulesList();
 
+        Response<DeviceGroup> InsertGroup(DeviceGroup rule);
+        Response<List<DeviceGroup>> GetGroupsList();
 
         //Will add interface methods for rules later
     }

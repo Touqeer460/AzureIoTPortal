@@ -9,9 +9,18 @@ namespace AzureIOT.Models
 {
     public class Telemetries
     {
+        public Telemetries() { }
+
+        public Telemetries(string Id, string Name, string Unit)
+        {
+            this.telemeteryId = Id;
+            this.telemeteryName = Name;
+            this.telemeteryUnit = Unit;
+        }
+
         [Key]
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Unit { get; set; }
+        public string telemeteryId { get; set; }
+        public string telemeteryName { get; set; }
+        public string telemeteryUnit { get; set; }
     }
 }

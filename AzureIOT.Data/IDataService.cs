@@ -15,9 +15,12 @@ namespace AzureIOT.DAL.DataProvider
         List<Telemetries> GetTelemetries();
         Telemetries GetTelemetryInfo(string id);
         List<DeviceGroup> GetAllGroups();
+        List<Rules> GetAllRules();
+        Rules GetRuleInfo(string id);
         DeviceGroup GetGroupInfo(string id);
         bool InsertGroup(DeviceGroup group);
         bool InsertDevice(Device device);
         bool InsertTelemetry(Telemetries telemetry);
+        bool InsertRule(Rules rule);
     }
 }
