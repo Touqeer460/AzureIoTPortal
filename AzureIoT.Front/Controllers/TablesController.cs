@@ -47,6 +47,12 @@ namespace AzureIoT.FrontEnd.Controllers
             return dataService.InsertGroup(group);
         }
 
+        public ActionResult RuleDetail(string Id)
+        {
+            List<Rules> rules = dataService.GetAllRules();
+            return View(rules.Find(x => x.Id == Id));
+        }
+
         public bool AddDevice(Device device)
         {
             return dataService.InsertDevice(device);
@@ -69,9 +75,11 @@ namespace AzureIoT.FrontEnd.Controllers
             ViewBag.Operators = AzureIOT.Models.Rules.AllowedOperators();
             return View(dataService.GetAllRules());
         }
-        public ActionResult RuleDetails(string Id)
+
+        public ActionResult DeviceGroupDetail(string Id)
         {
-            return View(dataService.GetRuleInfo(Id));
+            List<DeviceGroup> group = dataService.GetAllGroups();
+            return View(group.Find(x => x.Id == Id));
         }
     }
 }

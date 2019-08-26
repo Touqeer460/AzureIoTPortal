@@ -39,9 +39,7 @@ namespace AzureIOT.DAL.DataProvider
             string relativePath = $"{folderPathToStoreInfo}\\{devicePath}{format}";
             List<Device> azureDevices = subscription.GetDevicesList().ResponseObject;
             List<Device> localDevices = JsonConvert.DeserializeObject<List<Device>>(File.ReadAllText(relativePath)) ?? new List<Device>();
-            //Currently deploying this crude way to sync data.
-            //Will update later.
-            //Todo:
+            azureDevices = azureDevices ?? new List<Device>();
             azureDevices.ForEach(x =>
             {
                 if (localDevices.All(r => r.Id != x.Id))
@@ -59,6 +57,7 @@ namespace AzureIOT.DAL.DataProvider
             string relativePath = $"{folderPathToStoreInfo}\\{groupPath}{format}";
             List<DeviceGroup> savedGroups = subscription.GetGroupsList().ResponseObject;
             List<DeviceGroup> localGroups = this.GetAllDeviceGroupsForced();
+            savedGroups = savedGroups ?? new List<DeviceGroup>();
             savedGroups.ForEach(x =>
             {
                 if (localGroups.All(r => r.Id != x.Id))
@@ -93,6 +92,7 @@ namespace AzureIOT.DAL.DataProvider
             string relativePath = $"{folderPathToStoreInfo}\\{telemetriesPath}{format}";
             List<Telemetries> azureTelemetries = subscription.GetTelemetries().ResponseObject;
             List<Telemetries> localTelemetries = new List<Telemetries>();
+            azureTelemetries = azureTelemetries ?? new List<Telemetries>();
             azureTelemetries.ForEach(x =>
             {
                 if (x.telemeteryId != "" && localTelemetries.All(r => r.telemeteryId != x.telemeteryId))
@@ -213,6 +213,13 @@ namespace AzureIOT.DAL.DataProvider
             string relativePath = $"{folderPathToStoreInfo}\\{rulesPath}{format}";
             List<Rules> azureRules = subscription.GetRulesList().ResponseObject;
             List<Rules> localRules = JsonConvert.DeserializeObject<List<Rules>>(File.ReadAllText(relativePath)) ?? new List<Rules>();
+            azureRules.ToList().ForEach(x => 
+            {
+                if (x.Id != "" && localRules.All(r=>r.Id != x.Id))
+                {
+                    this.InsertRuleForced(x);
+                }
+            });
             return localRules;
         }
 
@@ -232,6 +239,16 @@ namespace AzureIOT.DAL.DataProvider
             string relativePath = $"{folderPathToStoreInfo}\\{rulesPath}{format}";
             subscription.InsertRule(rule);
             List<Rules> rules = this.GetAllRules();
+
+            rules.Add(rule);
+            File.WriteAllText(relativePath, JsonConvert.SerializeObject(rules));
+            return true;
+        }
+
+        public bool InsertRuleForced(Rules rule)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{rulesPath}{format}";
+            List<Rules> rules = JsonConvert.DeserializeObject<List<Rules>>(File.ReadAllText(relativePath)) ?? new List<Rules>();
 
             rules.Add(rule);
             File.WriteAllText(relativePath, JsonConvert.SerializeObject(rules));

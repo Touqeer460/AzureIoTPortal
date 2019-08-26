@@ -1,0 +1,152 @@
+﻿@using AzureIOT.Models
+@model AzureIOT.Models.Rules
+@{
+
+}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+<script>
+    function modal(v) {
+        $('#defaultModal').removeClass('hidden');
+        $('#content').addClass('hidden');
+    }
+    function closemodal(v) {
+        $('#defaultModal').addClass('hidden');
+        $('#content').removeClass('hidden');
+    }
+    $(function () {
+        $.localise('ui-multiselect', {/*language: 'en',*/ path: 'js/locale/' });
+        $(".multiselect").multiselect();
+        $('#switcher').themeswitcher();
+    });
+    function savemodal(v) {
+
+    }
+    function addRuleSet(v) {
+
+    }
+    function removeRuleSet(v) {
+        var n = v.parentElement;
+        var d = n.parentElement;
+        var rem = document.getElementById('ruleSet');
+        rem.removeChild(d);
+    }
+    function rowSelected(v) {
+        var rows = $('tr');
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].classList.remove('selected');
+        }
+        v.classList.add('selected');
+    }
+</script>
+<div class="fade in" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="defaultModalLabel">Add a rule</h4>
+        </div>
+        <div class="body">
+            <form class="form-horizontal">
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                        <label for="email_address_2">ID</label>
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" id="Id" disabled class="disabled form-control" maxlength="10" required placeholder="Enter ID" value="@Model.Id">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                        <label for="email_address_2">Name</label>
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" id="Name" disabled class="disabled form-control" maxlength="50" placeholder="Enter name" value="@Model.Name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                        <label for="email_address_2">Device Group</label>
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <select id="Group" disabled class="disabled form-control">
+                                    <option>@Model.DeviceGroup</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <h5 style="margin-left:75px; margin-top:25px">
+                        Rule sets
+                    </h5>
+                </div>
+                <div class="row" id="ruleSet">
+                    @foreach (var v in Model.RuleSets)
+                    {
+                        <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                <label for="email_address_2">Telemetery</label>
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select id="Group" disabled class="disabled form-control">
+                                            <option>@v.Telemetry</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                <label for="email_address_2">Operator</label>
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select id="Group" disabled class="form-control">
+                                            <option>@v.Operator</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                <label for="email_address_2">Value</label>
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input disabled type="text" id="Name" class="form-control" maxlength="50" value="@v.Value">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="row clearfix">
+                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                        @*<button type="submit" onclick="savemodal(this)" class="btn btn-primary m-t-15 waves-effect">SAVE</button>*@
+                        @*<button type="button" onclick="closemodal(this)" class="btn btn-primary m-t-15 waves-effect" data-dismiss="modal">CANCEL</button>*@
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br />
+    </div>
+</div>
+<!-- #END# Basic Examples -->

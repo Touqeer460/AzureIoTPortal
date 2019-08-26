@@ -58,6 +58,14 @@
                 closemodal(v);
             });
         }
+        function deleteGroup() {
+            var v = $('tr.selected');
+            if (v == null) {
+                return;
+            }
+            var n = $('tr.selected#Id').val();
+            alert(n);
+        }
     </script>
     <div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
         <div class="modal-content">
@@ -146,7 +154,7 @@
                         DEVICE GROUP
 
                         <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
-                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
+                        <button type="button" onclick="deleteGroup()" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
                         <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
                     </h2>
                     <div>
@@ -161,6 +169,7 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Telemetry</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -175,12 +184,13 @@
                                         }
                                         if (elem.Telemetries != null)
                                         {
-                                            elem.Telemetries.ToList().ForEach(x => { val += ((x) + (x != last ? ", " : "")); });
+                                            elem.Telemetries.ToList().ForEach(x => { val += ((x.ToString()) + (x.ToString() != last ? ", " : "")); });
                                         }
-                                        <tr>
+                                        <tr onclick="rowSelected(this)">
                                             <td>@elem.Id</td>
                                             <td>@elem.Name</td>
                                             <td>@val</td>
+                                            <td><a href="/Tables/DeviceGroupDetail/@elem.Id">View</a></td>
                                         </tr>
                                     }
                                 }

@@ -91,6 +91,7 @@ namespace AzureIOT.ConnectorService
                     requestDevice = registryManager.AddDeviceAsync(requestDevice).Result;
                 });
                 task.Wait();
+                device.Name = requestDevice.Id;
                 return new Response<Device>()
                 {
                     Success = true,
@@ -142,6 +143,7 @@ namespace AzureIOT.ConnectorService
 
         public Response<Device> InsertDevice(Device device)
         {
+            device.Id = device.Name.Replace(" ", "");
             return this.AddDeviceAsync(device);
         }
 

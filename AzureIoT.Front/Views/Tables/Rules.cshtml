@@ -94,7 +94,7 @@
                         <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="Name" class="form-control" maxlength="10" required placeholder="Enter ID">
+                                    <input type="text" id="Id" class="form-control" maxlength="10" required placeholder="Enter ID">
                                 </div>
                             </div>
                         </div>
@@ -183,13 +183,13 @@
                                 @{
                                     foreach (var elem in Model)
                                     {
-                                        <tr class="secondary">
+                                        <tr class="secondary" onclick="rowSelected(this)">
                                             <td>@elem.Id</td>
                                             <td>@elem.Name</td>
                                             <td>@elem.DeviceGroup</td>
                                             <td>@elem.Severity</td>
                                             <td>@elem.Status</td>
-                                            <td><a href="#">Edit</a></td>
+                                            <td><a href="/Tables/RuleDetail/@Html.Raw(elem.Id)">View</a></td>
                                         </tr>
                                     }
                                 }

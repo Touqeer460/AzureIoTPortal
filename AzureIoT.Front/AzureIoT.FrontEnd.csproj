@@ -3747,6 +3747,8 @@
     <Content Include="Scripts\plugins\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Scripts\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="Views\Tables\Rules.cshtml" />
+    <Content Include="Views\Tables\RuleDetail.cshtml" />
+    <Content Include="Views\Tables\DeviceGroupDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

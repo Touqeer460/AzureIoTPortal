@@ -36,7 +36,19 @@
         .remove{
             visibility:hidden;
         }
+        .selected{
+            background-color:powderblue;
+        }
     </style>
+    <script>
+        function rowSelected(v) {
+            var rows = $('tr');
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].classList.remove('selected');
+            }
+            v.classList.add('selected');
+        }
+    </script>
 </head>
 <body class="theme-black">
     <!-- Page Loader -->
