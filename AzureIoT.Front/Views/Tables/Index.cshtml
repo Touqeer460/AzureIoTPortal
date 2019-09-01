@@ -37,6 +37,23 @@
             var elem = v.parentNode;
             elem.class = 'checked';
         }
+        function removeDevice(v) {
+            var r = $('.selected').find('td:eq(0)').text();
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "/Tables/RemoveDevice",
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache",
+                },
+                data: '{deviceId: "' + r + '"}',
+            };
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            });
+        }
     </script>
     <div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
         <div class="modal-content">
@@ -100,7 +117,7 @@
                         <i class="material-icons"> devices_other</i>
                         DEVICE
                         <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
-                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
+                        <button type="button" onclick="removeDevice(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
                         <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
                     </h2>
                     <div>
@@ -112,7 +129,6 @@
                         <table class="table table-hover js-basic-example dataTable">
                             <thead>
                                 <tr class="bg-blue">
-                                    <th></th>
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Device Group</th>
@@ -124,9 +140,8 @@
                                 @{
                                     foreach (var elem in Model)
                                     {
-                                        <tr>
-                                            <td onclick="checkUncheck(this)"><input type="checkbox" /></td>
-                                            <td>@elem.Id</td>
+                                        <tr onclick="rowSelected(this)">
+                                            <td><a href="/Tables/DeviceDetail/@elem.Id">@elem.Id</a></td>
                                             <td>@elem.Name</td>
                                             <td>@elem.Group</td>
                                             <td>@elem.Status</td>

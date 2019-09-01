@@ -10,17 +10,25 @@ namespace AzureIOT.DAL.DataProvider
     public interface IDataService
     {
         bool Connect(string constr);
-        Task<List<Device>> GetAllDevices();
-        Device GetDeviceInfo(string id);
-        List<Telemetries> GetTelemetries();
-        Telemetries GetTelemetryInfo(string id);
-        List<DeviceGroup> GetAllGroups();
-        List<Rules> GetAllRules();
+
         Rules GetRuleInfo(string id);
+        Device GetDeviceInfo(string id);
+        Telemetries GetTelemetryInfo(string id);
         DeviceGroup GetGroupInfo(string id);
+
+        bool InsertRule(Rules rule);
         bool InsertGroup(DeviceGroup group);
         bool InsertDevice(Device device);
         bool InsertTelemetry(Telemetries telemetry);
-        bool InsertRule(Rules rule);
+
+        List<Rules> GetAllRules();
+        List<DeviceGroup> GetAllGroups();
+        Task<List<Device>> GetAllDevices();
+        List<Telemetries> GetTelemetries();
+
+        bool RemoveRule(Rules rule);
+        bool RemoveGroup(DeviceGroup group);
+        bool RemoveDevice(Device device);
+        bool RemoveTelemetry(Telemetries telemetry);
     }
 }

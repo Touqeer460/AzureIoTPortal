@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,8 +29,8 @@ namespace AzureIOT.ConnectorService
 
         public AzureSubscriptionService()
         {
-            this.connectionStringForPortal = "HostName=iotHubgldwcmyk4hlua.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=SbkvNpL+vnsWjDfeTk28uIHsN6hwCF2AOFdjZ6rZOAU=";
-            this.connectionStringForStorage = "DefaultEndpointsProtocol=https;AccountName=storagegldwcmyk4hlua;AccountKey=verwBcgOlLj9O3QMKtpUbxKbnJpOSOEK/PYdao40Pxt3Lta0xyr1FC9/8ZfXu3IISlSMU+ggiyGjU389o1JqvA==;EndpointSuffix=core.windows.net";
+            this.connectionStringForPortal = ConfigurationManager.AppSettings["AzureSubscriptionStr"];
+            this.connectionStringForStorage = ConfigurationManager.AppSettings["AzureStorageStr"];
             registryManager = RegistryManager.CreateFromConnectionString(connectionStringForPortal);
 
 
@@ -173,7 +174,7 @@ namespace AzureIOT.ConnectorService
         {
             try
             {
-                string storage = "storagekaispe";
+                string storage = ConfigurationManager.AppSettings["AzureStorageName"];
                 CloudStorageAccount storageAccount = CloudStorageAccount.Parse(this.connectionStringForStorage);
                 CloudBlobClient client = storageAccount.CreateCloudBlobClient();
                 CloudBlobContainer container = client.GetContainerReference(storage);
@@ -279,7 +280,7 @@ namespace AzureIOT.ConnectorService
 
         public Response<DeviceGroup> InsertGroup(DeviceGroup group)
         {
-            SetupBlob(ruleKey);
+            SetupBlob(groupKey);
             if (blob.Exists())
             {
                 var groupsData = blob.DownloadText();
@@ -320,6 +321,180 @@ namespace AzureIOT.ConnectorService
                 throw ex;
             }
             return null;// = new Response<List<Telemetries>>()
+        }
+
+        public Response<bool> RemoveRule(Rules rule)
+        {
+            SetupBlob(telemetryKey);
+            if (blob.Exists())
+            {
+                var ruleData = blob.DownloadText();
+                List<Rules> myList= JsonConvert.DeserializeObject<List<Rules>>(ruleData);
+                rule = myList.Find(x => x.Id == rule.Id);
+                if (rule != null)
+                {
+                    myList.Remove(rule);
+                }
+                string data = JsonConvert.SerializeObject(myList);
+                Task t = Task.Run(() => { blob.UploadTextAsync(data); });
+                t.Wait();
+            }
+            return new Response<bool>()
+            {
+                Success = true,
+                ResponseObject = true
+            };
+        }
+
+        public Response<bool> RemoveDevice(Device device)
+        {
+            Microsoft.Azure.Devices.Device requestDevice;
+            try
+            {
+                //Console.WriteLine("New device:");
+
+                requestDevice = new Microsoft.Azure.Devices.Device(device.Id);
+                Task task = Task.Run(() =>
+                {
+                    registryManager.RemoveDeviceAsync(requestDevice);
+                });
+                task.Wait();
+                device.Name = requestDevice.Id;
+                return new Response<bool>()
+                {
+                    Success = true,
+                    ResponseObject = true
+                };
+            }
+            catch (DeviceAlreadyExistsException ex)
+            {
+                List<AzureException> exception = new List<AzureException>() { new AzureException() { Exception = ex, Message = ex.Message } };
+                return new Response<bool>()
+                {
+                    Success = false,
+                    ResponseObject = false,
+                    Exceptions = exception.ToArray()
+                };
+            }
+        }
+
+        public Response<bool> RemoveGroup(DeviceGroup group)
+        {
+            SetupBlob(groupKey);
+            if (blob.Exists())
+            {
+                var groupsData = blob.DownloadText();
+                List<DeviceGroup> myList = JsonConvert.DeserializeObject<List<DeviceGroup>>(groupsData);
+                group = myList.Find(x => x.Id == group.Id);
+                if (group != null)
+                {
+                    myList.Remove(group);
+                }
+                string data = JsonConvert.SerializeObject(myList);
+                Task t = Task.Run(() => { blob.UploadTextAsync(data); });
+                t.Wait();
+            }
+            return new Response<bool>()
+            {
+                Success = true,
+                ResponseObject = true
+            };
+        }
+
+        public Response<bool> RemoveTelemetery(Telemetries telemetry)
+        {
+            SetupBlob(telemetryKey);
+            if (blob.Exists())
+            {
+                var telemetryData = blob.DownloadText();
+                List<Telemetries> myList = JsonConvert.DeserializeObject<List<Telemetries>>(telemetryData);
+                telemetry = myList.Find(x => x.telemeteryId == telemetry.telemeteryId);
+                if (telemetry != null)
+                {
+                    myList.Remove(telemetry);
+                }
+                string data = JsonConvert.SerializeObject(myList);
+                Task t = Task.Run(() => { blob.UploadTextAsync(data); });
+                t.Wait();
+            }
+            return new Response<bool>()
+            {
+                Success = true,
+                ResponseObject = true
+            };
+        }
+
+        public Device DeviceDetail(string DeviceId)
+        {
+            registryManager = RegistryManager.CreateFromConnectionString(connectionStringForPortal);
+            List<Device> localDevices = new List<Device>();
+            IEnumerable<Microsoft.Azure.Devices.Device> azureDevice = new List<Microsoft.Azure.Devices.Device>();// = registryManager.GetDevicesAsync(100);
+            Task task = Task.Run(() => { azureDevice = registryManager.GetDevicesAsync(100).Result; });
+            task.Wait();
+
+            try
+            {
+                Device currentDevice = new Device();
+                foreach (var x in azureDevice)
+                {
+                    if (x.Id != DeviceId)
+                    {
+                        continue;
+                    }
+                    currentDevice = new Device()
+                    {
+                        Id = x.Id,
+                        Status = (AzureIOT.Models.Status)x.Status,
+                        LastActive = x.LastActivityTime,
+                        ConnectionStatus = (AzureIOT.Models.ConnectStatus) x.ConnectionState,
+                        CloudToDeviceMessages = x.CloudToDeviceMessageCount,
+                        //AuthType = (AzureIOT.Models.AuthTypes)(x. ?? x.AuthenticationType),
+                        PrimaryThumbprint = x.Authentication != null ? x.Authentication.X509Thumbprint.PrimaryThumbprint : null,
+                        SecondaryThumbprint = x.Authentication != null ? x.Authentication.X509Thumbprint.SecondaryThumbprint : null,
+                    };
+                }
+                return currentDevice;
+            }
+            catch (DeviceAlreadyExistsException ex)
+            {
+                List<AzureException> exception = new List<AzureException>() { new AzureException() { Exception = ex, Message = ex.Message } };
+                return new Device()
+                {
+                };
+            }
+        }
+
+        public DashboardFacts GetDashboardFacts()
+        {
+            DashboardFacts facts = new DashboardFacts();
+            registryManager = RegistryManager.CreateFromConnectionString(connectionStringForPortal);
+            List<Device> localDevices = new List<Device>();
+            IEnumerable<Microsoft.Azure.Devices.Device> azureDevice = new List<Microsoft.Azure.Devices.Device>();// = registryManager.GetDevicesAsync(100);
+            Task task = Task.Run(() => { azureDevice = registryManager.GetDevicesAsync(100).Result; });
+            task.Wait();
+
+            try
+            {
+                facts.TotalDevices = azureDevice.Count();
+                foreach (var x in azureDevice)
+                {
+                    if (x.ConnectionState == DeviceConnectionState.Connected)
+                    {
+                        facts.ConnectedDevices++;
+                    }
+                    else
+                    {
+                        facts.OfflineDevices++;
+                    }
+                    facts.TotalCloudToDeviceMessages = x.CloudToDeviceMessageCount;
+                }
+                return facts;
+            }
+            catch (DeviceAlreadyExistsException ex)
+            {
+                List<AzureException> exception = new List<AzureException>() { new AzureException() { Exception = ex, Message = ex.Message } };
+                return facts;
+            }
         }
     }
 }

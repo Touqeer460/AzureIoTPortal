@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace AzureIOT.DAL.DataProvider
 {
@@ -16,8 +17,12 @@ namespace AzureIOT.DAL.DataProvider
         const string format = ".json", devicePath = "devices", groupPath = "groups", telemetriesPath = "telemetries", rulesPath = "rules";
         ISubscriptionService subscription;
 
-        public DataProviderFile(string constr = "D:\\home\\site\\wwwroot\\Data")//Change this if you want.
+        public DataProviderFile(string constr = "")//Change this if you want.
         {
+            if (constr == "")
+            {
+                constr = ConfigurationManager.AppSettings["DataPath"];
+            }
             this.Connect(constr);
             //Farrukh you have to change this HardCardValue to your class. new AzureSubscriptionClass
             subscription = new AzureSubscriptionService();
@@ -253,6 +258,70 @@ namespace AzureIOT.DAL.DataProvider
             rules.Add(rule);
             File.WriteAllText(relativePath, JsonConvert.SerializeObject(rules));
             return true;
+        }
+
+        public bool RemoveRule(Rules rule)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{rulesPath}{format}";
+            List<Rules> localRules = this.GetAllRules();
+            if (subscription.RemoveRule(rule).Success)
+            {
+                rule = localRules.Find(x => x.Id == rule.Id);
+                if (rule != null)
+                {
+                    localRules.Remove(rule);
+                    File.WriteAllText(relativePath, JsonConvert.SerializeObject(localRules));
+                }
+            }
+            return false;
+        }
+
+        public bool RemoveGroup(DeviceGroup group)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{groupPath}{format}";
+            List<DeviceGroup> localGroups = this.GetAllDeviceGroupsForced();
+            if (subscription.RemoveGroup(group).Success)
+            {
+                group = localGroups.Find(x => x.Id == group.Id);
+                if (group != null)
+                {
+                    localGroups.Remove(group);
+                    File.WriteAllText(relativePath, JsonConvert.SerializeObject(localGroups));
+                }
+            }
+            return false;
+        }
+
+        public bool RemoveDevice(Device device)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{devicePath}{format}";
+            List<Device> localDevices = this.GetAllDevicesForced();
+            if (subscription.RemoveDevice(device).Success)
+            {
+                device = localDevices.Find(x => x.Id == device.Id);
+                if (device != null)
+                {
+                    localDevices.Remove(device);
+                    File.WriteAllText(relativePath, JsonConvert.SerializeObject(localDevices));
+                }
+            }
+            return false;
+        }
+
+        public bool RemoveTelemetry(Telemetries telemetry)
+        {
+            string relativePath = $"{folderPathToStoreInfo}\\{telemetriesPath}{format}";
+            List<Telemetries> localTelemetries = this.GetAllTelemetriesForced();
+            if (subscription.RemoveTelemetery(telemetry).Success)
+            {
+                telemetry = localTelemetries.Find(x => x.telemeteryId == telemetry.telemeteryId);
+                if (telemetry != null)
+                {
+                    localTelemetries.Remove(telemetry);
+                    File.WriteAllText(relativePath, JsonConvert.SerializeObject(localTelemetries));
+                }
+            }
+            return false;
         }
     }
 }

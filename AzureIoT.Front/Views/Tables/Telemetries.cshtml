@@ -41,6 +41,23 @@
                 console.log(response);
             });
         }
+        function removeTelemetry(v) {
+            var r = $('.selected').find('td:eq(0)').text();
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "/Tables/RemoveTelemetry",
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    "cache-control": "no-cache",
+                },
+                data: '{telemetryId: "' + r + '"}',
+            };
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            });
+        }
     </script>
     <div class="fade in hidden" id="defaultModal" tabindex="-1" role="dialog">
         <div class="modal-content">
@@ -109,7 +126,7 @@
                         TELEMETRY
 
                         <i onclick="searchToggle(this)" class="material-icons pull-right btn bg-black waves-effect">search</i>
-                        <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
+                        <button type="button" onclick="removeTelemetry(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">Delete</button>
                         <button type="button" onclick="modal(this)" class=" pull-right btn bg-blue waves-effect" style="margin-right:8px">New</button>
                     </h2>
                     <div>
@@ -131,7 +148,7 @@
                                 @{
                                     foreach (var elem in Model)
                                     {
-                                        <tr class="secondary">
+                                        <tr class="secondary" onclick="rowSelected(this)">
                                             <td>@elem.telemeteryId</td>
                                             <td>@elem.telemeteryName</td>
                                             <td>@elem.telemeteryUnit</td>

@@ -1,5 +1,6 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Dashboard";
+    var dashboard = ViewBag.Facts;
 }
 <script src="~/Scripts/plugins/jquery/jquery.min.js"></script>
 <script src="~/Scripts/plugins/bootstrap/js/bootstrap.js"></script>
@@ -26,36 +27,69 @@
 <!-- content -->
 <!-- Widgets -->
 <div class="row clearfix">
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="info-box bg-pink hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">devices_other</i>
+            </div>
+            <div class="content">
+                <div class="text">TOTAL DEVICES</div>
+                <div class="number count-to" data-from="0" data-to="@dashboard.TotalDevices" data-speed="15" data-fresh-interval="20"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="info-box bg-cyan hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">cast_connected</i>
+            </div>
+            <div class="content">
+                <div class="text">CONNECTED DEVICES</div>
+                <div class="number count-to" data-from="0" data-to="@dashboard.ConnectedDevices" data-speed="1000" data-fresh-interval="20"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="info-box bg-orange hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">help</i>
+            </div>
+            <div class="content">
+                <div class="text">OFFLINE DEVICES</div>
+                <div class="number count-to" data-from="0" data-to="@dashboard.OfflineDevices" data-speed="1000" data-fresh-interval="20"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-pink hover-expand-effect">
             <div class="icon">
                 <i class="material-icons">playlist_add_check</i>
             </div>
             <div class="content">
-                <div class="text">NEW DEVICES</div>
-                <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></div>
+                <div class="text">TOTAL RULES</div>
+                <div class="number count-to" data-from="0" data-to="@dashboard.NumberOfRules" data-speed="15" data-fresh-interval="20"></div>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-cyan hover-expand-effect">
             <div class="icon">
-                <i class="material-icons">help</i>
+                <i class="material-icons">cloud_upload</i>
             </div>
             <div class="content">
-                <div class="text">NEW RULES</div>
-                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20"></div>
+                <div class="text">TOTAL DEVICE TO CLOUD MESSAGES</div>
+                <div class="number count-to" data-from="0" data-to="@dashboard.TotalDeviceToCloudMessages" data-speed="1000" data-fresh-interval="20"></div>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-orange hover-expand-effect">
             <div class="icon">
-                <i class="material-icons">timeline</i>
+                <i class="material-icons">cloud_download</i>
             </div>
             <div class="content">
-                <div class="text">AVG HITS</div>
-                <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20"></div>
+                <div class="text">CLOUD TO DEVICES MESSAGES</div>
+                <div class="number count-to" data-from="0" data-to="@dashboard.TotalCloudToDeviceMessages" data-speed="1000" data-fresh-interval="20"></div>
             </div>
         </div>
     </div>

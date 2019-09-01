@@ -17,6 +17,13 @@ namespace AzureIOT.Models
         public AuthTypes AuthType { get; set; }
         public string PrimaryThumbprint { get; set; }
         public string SecondaryThumbprint { get; set; }
+        public ConnectStatus ConnectionStatus { get; set; }
+    }
+
+    public enum ConnectStatus
+    {
+        Connected = 1,
+        Disconnected = 0
     }
 
     public enum Status

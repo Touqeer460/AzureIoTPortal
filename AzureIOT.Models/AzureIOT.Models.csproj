@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureException.cs" />
+    <Compile Include="DashboardFacts.cs" />
     <Compile Include="DeviceTelemetry.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="Device.cs" />
